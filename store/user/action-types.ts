@@ -1,0 +1,2 @@
+export const USER_CLEAR_DATA = 'USER_CLEAR_DATA';
+export const USER_STORE_DATA = 'USER_STORE_DATA';
