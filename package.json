@@ -1,5 +1,14 @@
 {
+  "name": "deepseen-mobile",
+  "version": "1.0.0",
+  "description": "Mobile application for the Deepseen project",
+  "private": true,
   "main": "node_modules/expo/AppEntry.js",
+  "homepage": "https://github.com/peterdee/deepseen-mobile",
+  "author": {
+    "name": "Peter Dyumin",
+    "url": "https://github.com/peterdee"
+  },
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -8,11 +17,25 @@
     "eject": "expo eject",
     "test": "jest --watchAll"
   },
-  "jest": {
-    "preset": "jest-expo"
+  "engines": {
+    "node": "~14.12.0",
+    "npm": "~6.14.9"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peterdee/deepseen-mobile"
+  },
+  "keywords": [
+    "Deepseen",
+    "React Native",
+    "Redux",
+    "Socket.IO",
+    "Websockets"
+  ],
+  "license": "MIT",
   "dependencies": {
     "@expo/vector-icons": "^10.0.0",
+    "@react-native-community/async-storage": "^1.12.1",
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/bottom-tabs": "^5.8.0",
     "@react-navigation/native": "^5.7.3",
@@ -42,8 +65,13 @@
     "@types/react": "~16.9.35",
     "@types/react-native": "~0.63.2",
     "@types/react-redux": "^7.1.12",
+    "@types/redux-logger": "^3.0.8",
+    "@types/redux-persist": "^4.3.1",
     "jest-expo": "~39.0.0",
+    "redux-logger": "^3.0.6",
     "typescript": "~3.9.5"
   },
-  "private": true
+  "jest": {
+    "preset": "jest-expo"
+  }
 }
