@@ -12,8 +12,8 @@ Stack: React Native, Expo, Socket.IO, Typescript
 git clone https://github.com/peterdee/deepseen-mobile
 cd ./deepseen-mobile
 nvm use 14
-npm i -g expo-cli
-npm i
+npm i -g expo-cli yarn
+yarn
 ```
 
 ### Launch
