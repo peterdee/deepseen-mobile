@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 
 import { CLIENT_TYPE } from '../constants/Values';
 import Events from '../constants/Events';
+import formatName from '../utilities/format-track-name';
 import { Text, View } from '../components/Themed';
 import {
   RoomStatusData,
@@ -32,7 +33,7 @@ export default () => {
       'https://deepseen-ws.herokuapp.com',
       {
         query: {
-          token: auth.token,
+          token: auth.token || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOiJtb2JpbGUiLCJpbWFnZSI6IiQyYSQxMCRCRVhGUDhSdVpKeUJtZ2ltREtUcWNPakl4V2llN2s0UUxjVHFZcS54SU5UNzVNeHU1S3c2QyIsInVzZXJJZCI6IjVmZDcyY2RjYTJhNmQxM2U2MmRiMjkwOSIsImV4cCI6MTk2ODc0Mjg0MH0.VbO1JZQRSVOPXIUb79iMiIAUt5wURbeuoPCi4QjDMlk',
         },
         autoConnect: false,
         reconnection: true,
@@ -55,13 +56,9 @@ export default () => {
     console.log('>>>>>>>> connect error\n', JSON.stringify(error));
   });
 
-  connection.on('connect', () => {
-    console.log('connected');
-  });
+  connection.on(Events.CONNECT, () => setMobileConnected(true));
 
-  connection.on('disconnect', (reason: string) => {
-    console.log('disconnected', reason);
-  });
+  connection.on(Events.DISCONNECT, () => setMobileConnected(false));
 
   // check if desktop is connected
   connection.on(
@@ -110,40 +107,51 @@ export default () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
-        { track.name }
-      </Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <View style={styles.controls}>
-        <Button
-          onPress={() => handleControls(Events.PLAY_PREVIOUS)}
-          title="Previous"
-        >
-          PREVIOUS
-        </Button>
-        <Button
-          onPress={() => handleControls(Events.STOP_PLAYBACK)}
-          title="Stop"
-        >
-          STOP
-        </Button>
-        <Button
-          onPress={() => handleControls(Events.PLAY_PAUSE)}
-          title="Play"
-        >
-          PLAY
-        </Button>
-        <Button
-          onPress={() => handleControls(Events.PLAY_NEXT)}
-          title="Next"
-        >
-          NEXT
-        </Button>
-      </View>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <Text>
-        {`Desktop application is ${desktopConnected ? 'connected' : 'not connected'}`}
-      </Text>
+      { desktopConnected && mobileConnected
+        ? (
+          <View style={styles.trackInfo}>
+            <Text style={styles.title}>
+              { formatName(track.name) }
+            </Text>
+            <View
+              style={styles.separator}
+              lightColor="#eee"
+              darkColor="rgba(255,255,255,0.1)"
+            />
+            <View style={styles.controls}>
+              <Button
+                onPress={() => handleControls(Events.PLAY_PREVIOUS)}
+                title="Previous"
+              >
+                PREVIOUS
+              </Button>
+              <Button
+                onPress={() => handleControls(Events.STOP_PLAYBACK)}
+                title="Stop"
+              >
+                STOP
+              </Button>
+              <Button
+                onPress={() => handleControls(Events.PLAY_PAUSE)}
+                title="Play"
+              >
+                PLAY
+              </Button>
+              <Button
+                onPress={() => handleControls(Events.PLAY_NEXT)}
+                title="Next"
+              >
+                NEXT
+              </Button>
+            </View>
+          </View>
+        )
+        : (
+          <Text style={styles.title}>
+            Desktop application is not connected
+          </Text>
+        )
+      }
     </View>
   );
 }

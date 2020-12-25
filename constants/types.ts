@@ -1,6 +1,8 @@
 export interface EventsList {
+  CONNECT: string;
   CONNECT_ERROR: string;
   DESKTOP_INIT: string;
+  DISCONNECT: string;
   NEW_CLIENT_CONNECTED: string;
   PLAY_NEXT: string;
   PLAY_PAUSE: string;

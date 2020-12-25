@@ -2,8 +2,10 @@ import { EventsList } from './types';
 
 // Possible events
 export default {
+  CONNECT: 'connect',
   CONNECT_ERROR: 'connect_error',
   DESKTOP_INIT: 'DESKTOP_INIT',
+  DISCONNECT: 'disconnect',
   NEW_CLIENT_CONNECTED: 'NEW_CLIENT_CONNECTED',
   PLAY_NEXT: 'PLAY_NEXT',
   PLAY_PAUSE: 'PLAY_PAUSE',
