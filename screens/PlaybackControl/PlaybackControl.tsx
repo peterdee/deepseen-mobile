@@ -4,28 +4,31 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Button } from 'react-native';
 import io, { Socket } from 'socket.io-client';
 import { useSelector } from 'react-redux';
 
-import { CLIENT_TYPE } from '../constants/Values';
-import Events from '../constants/Events';
-import formatName from '../utilities/format-track-name';
-import { Text, View } from '../components/Themed';
+import { CLIENT_TYPE } from '../../constants/Values';
+import Events from '../../constants/Events';
+import { View } from '../../components/Themed';
 import {
   RoomStatusData,
   Track,
   UpdateCurrentTrackData,
+  UpdateVolumeData,
 } from './types';
-import { RootState } from '../store';
-import { styles } from './TabOneStyles';
+import { RootState } from '../../store';
+import { styles } from './styles';
 
-export default () => {
+import { Controls } from './components/Controls';
+import { NotConnected } from './components/NotConnected';
+
+export const PlaybackControl = (): JSX.Element => {
   const auth = useSelector((state: RootState) => state.auth);
   const [track, setTrack] = useState({} as Track);
 
   const [desktopConnected, setDesktopConnected] = useState(false);
   const [mobileConnected, setMobileConnected] = useState(false);
+  const [volume, setVolume] = useState(0);
 
   // store connection
   const { current: connection } = useRef<typeof Socket>(
@@ -89,6 +92,18 @@ export default () => {
     },
   );
 
+  // update volume
+  connection.on(
+    Events.UPDATE_VOLUME,
+    (data: UpdateVolumeData) => {
+      console.log('set vol', data)
+      const { target = '', volume } = data;
+      if (target === CLIENT_TYPE) {
+        setVolume(Math.round(Number(volume) * 100));
+      }
+    },
+  );
+
   /**
    * Handle playback controls
    * @param {string} event - Websockets event
@@ -105,51 +120,40 @@ export default () => {
     [connection],
   );
 
+  /**
+   * Handle player volume
+   * @param {number|string} value - volume value
+   * @returns {boolean|SocketIOClient.Socket}
+   */
+  const handleVolume = useCallback(
+    (value: number | string): boolean | typeof Socket => {
+      if (!connection.connected) {
+        return false;
+      }
+      console.log('emit from mobile')
+      return connection.emit(
+        Events.UPDATE_VOLUME,
+        {
+          volume: value,
+        },
+      );
+    },
+    [],
+  );
+
   return (
     <View style={styles.container}>
       { desktopConnected && mobileConnected
         ? (
-          <View style={styles.trackInfo}>
-            <Text style={styles.title}>
-              { formatName(track.name) }
-            </Text>
-            <View
-              style={styles.separator}
-              lightColor="#eee"
-              darkColor="rgba(255,255,255,0.1)"
-            />
-            <View style={styles.controls}>
-              <Button
-                onPress={() => handleControls(Events.PLAY_PREVIOUS)}
-                title="Previous"
-              >
-                PREVIOUS
-              </Button>
-              <Button
-                onPress={() => handleControls(Events.STOP_PLAYBACK)}
-                title="Stop"
-              >
-                STOP
-              </Button>
-              <Button
-                onPress={() => handleControls(Events.PLAY_PAUSE)}
-                title="Play"
-              >
-                PLAY
-              </Button>
-              <Button
-                onPress={() => handleControls(Events.PLAY_NEXT)}
-                title="Next"
-              >
-                NEXT
-              </Button>
-            </View>
-          </View>
+          <Controls
+            handleControls={handleControls}
+            handleVolume={handleVolume}
+            track={track}
+            volume={volume}
+          />
         )
         : (
-          <Text style={styles.title}>
-            Desktop application is not connected
-          </Text>
+          <NotConnected />
         )
       }
     </View>

@@ -5,7 +5,7 @@ import * as React from 'react';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
-import TabOneScreen from '../screens/TabOneScreen';
+import { PlaybackControl } from '../screens/PlaybackControl';
 import TabTwoScreen from '../screens/TabTwoScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 
@@ -16,20 +16,24 @@ export default function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
-      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
+      initialRouteName="PlaybackControl"
+      tabBarOptions={{
+        activeTintColor: Colors[colorScheme].tint,
+        showLabel: false,
+      }}
+    >
       <BottomTab.Screen
-        name="TabOne"
+        name="PlaybackControl"
         component={TabOneNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="ios-play-circle" color={color} />,
         }}
       />
       <BottomTab.Screen
-        name="TabTwo"
+        name="Account"
         component={TabTwoNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="ios-person" color={color} />,
         }}
       />
     </BottomTab.Navigator>
@@ -44,17 +48,17 @@ function TabBarIcon(props: { name: string; color: string }) {
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
-const TabOneStack = createStackNavigator<TabOneParamList>();
+const PlaybackControlStack = createStackNavigator<TabOneParamList>();
 
 function TabOneNavigator() {
   return (
-    <TabOneStack.Navigator>
-      <TabOneStack.Screen
+    <PlaybackControlStack.Navigator>
+      <PlaybackControlStack.Screen
         name="TabOneScreen"
-        component={TabOneScreen}
-        options={{ headerTitle: 'Playback Controls' }}
+        component={PlaybackControl}
+        options={{ headerTitle: 'Playback Control' }}
       />
-    </TabOneStack.Navigator>
+    </PlaybackControlStack.Navigator>
   );
 }
 

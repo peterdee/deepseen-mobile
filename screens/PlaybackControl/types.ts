@@ -1,3 +1,5 @@
+import { Socket } from 'socket.io-client';
+
 export interface ClientRecord {
   client: string;
   socketId: string;
@@ -19,6 +21,13 @@ export interface Track {
   type: string;
 };
 
+export interface ControlsProps {
+  handleControls: (value: string) => boolean | typeof Socket;
+  handleVolume: (value: number | string) => boolean | typeof Socket;
+  track: Track;
+  volume: number;
+}
+
 export interface DesktopInitData {
   elapsed: number;
   isMuted: boolean;
@@ -37,6 +46,11 @@ export interface RoomStatusData {
 export interface UpdateCurrentTrackData {
   target: string;
   track: Track;
+};
+
+export interface UpdateVolumeData {
+  target: string;
+  volume: number | string;
 };
 
 export type IncomingEvent = UpdateCurrentTrackData
