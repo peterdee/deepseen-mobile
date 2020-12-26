@@ -1,14 +1,15 @@
 import React, {
   useCallback,
+  useContext,
   useEffect,
-  useRef,
   useState,
 } from 'react';
-import io, { Socket } from 'socket.io-client';
+import { Socket } from 'socket.io-client';
 import { useSelector } from 'react-redux';
 
-import { CLIENT_TYPE } from '../../constants/Values';
+import { CLIENT_TYPE, CLIENT_TYPES } from '../../constants/Values';
 import Events from '../../constants/Events';
+import IoContext from '../../contexts/socket-io';
 import { View } from '../../components/Themed';
 import {
   RoomStatusData,
@@ -22,7 +23,13 @@ import { styles } from './styles';
 import { Controls } from './components/Controls';
 import { NotConnected } from './components/NotConnected';
 
+/**
+ * Playback Control screen
+ * @returns {JSX.Element}
+ */
 export const PlaybackControl = (): JSX.Element => {
+  const connection = useContext(IoContext);
+
   const auth = useSelector((state: RootState) => state.auth);
   const [track, setTrack] = useState({} as Track);
 
@@ -30,79 +37,92 @@ export const PlaybackControl = (): JSX.Element => {
   const [mobileConnected, setMobileConnected] = useState(false);
   const [volume, setVolume] = useState(0);
 
-  // store connection
-  const { current: connection } = useRef<typeof Socket>(
-    io(
-      'https://deepseen-ws.herokuapp.com',
-      {
-        query: {
-          token: auth.token || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOiJtb2JpbGUiLCJpbWFnZSI6IiQyYSQxMCRCRVhGUDhSdVpKeUJtZ2ltREtUcWNPakl4V2llN2s0UUxjVHFZcS54SU5UNzVNeHU1S3c2QyIsInVzZXJJZCI6IjVmZDcyY2RjYTJhNmQxM2U2MmRiMjkwOSIsImV4cCI6MTk2ODc0Mjg0MH0.VbO1JZQRSVOPXIUb79iMiIAUt5wURbeuoPCi4QjDMlk',
-        },
-        autoConnect: false,
-        reconnection: true,
-        reconnectionAttempts: 10,
-        reconnectionDelay: 1000,
-        reconnectionDelayMax: 10000,
-      }
-    ),
+  // handle incoming connect event
+  const connect = useCallback(
+    () => setMobileConnected(true),
+    [],
   );
 
-  useEffect(() => {
-    connection.open();
+  // handle incoming connect_error event
+  const connectError = useCallback(
+    (error: any) => console.log('-> CONNECT_ERROR\n', JSON.stringify(error)),
+    [],
+  );
 
-    return () => {
-      connection.close();
-    };
-  }, []);
+  // handle incoming disconnect event
+  const disconnect = useCallback(
+    () => setMobileConnected(false),
+    [],
+  );
 
-  connection.on(Events.CONNECT_ERROR, (error: any) => {
-    console.log('>>>>>>>> connect error\n', JSON.stringify(error));
-  });
-
-  connection.on(Events.CONNECT, () => setMobileConnected(true));
-
-  connection.on(Events.DISCONNECT, () => setMobileConnected(false));
-
-  // check if desktop is connected
-  connection.on(
-    Events.ROOM_STATUS,
-    (data: RoomStatusData) => {
+  // handle incoming ROOM_STATUS event
+  const roomStatus = useCallback(
+    (data: RoomStatusData): boolean | void => {
       const { room, target = '' } = data;
       if (!(target && target === CLIENT_TYPE)) {
         return false;
       }
 
-      if (Array.isArray(room) && room.length > 0) {
-        const filtered = room.filter(({ client = '' }) => client === 'desktop');
-        if (filtered.length > 0) {
-          setDesktopConnected(true);
-        }
+      if (!(Array.isArray(room) && room.length > 0)) {
+        return false;
       }
+
+      const filtered = room.filter(({ client = '' }) => client === CLIENT_TYPES.desktop);
+      if (filtered.length > 0) {
+        return setDesktopConnected(true);
+      }
+
+      return false;
     },
+    [],
   );
 
-  // update track data
-  connection.on(
-    Events.UPDATE_CURRENT_TRACK,
-    (data: UpdateCurrentTrackData) => {
+  // handle incoming UPDATE_CURRENT_TRACK event
+  const updateCurrentTrack = useCallback(
+    (data: UpdateCurrentTrackData): void => {
       const { target = '', track } = data;
       if (target === CLIENT_TYPE) {
         setTrack(track);
       }
     },
+    [],
   );
 
-  // update volume
-  connection.on(
-    Events.UPDATE_VOLUME,
+  // handle incoming UPDATE_VOLUME event
+  const updateVolume = useCallback(
     (data: UpdateVolumeData) => {
-      console.log('set vol', data)
       const { target = '', volume } = data;
       if (target === CLIENT_TYPE) {
         setVolume(Math.round(Number(volume) * 100));
       }
     },
+    [],
   );
+
+  useEffect(() => {
+    // set token and open the Socket.IO connection
+    connection.io.opts.query = { token: auth.token || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOiJtb2JpbGUiLCJpbWFnZSI6IiQyYSQxMCRCRVhGUDhSdVpKeUJtZ2ltREtUcWNPakl4V2llN2s0UUxjVHFZcS54SU5UNzVNeHU1S3c2QyIsInVzZXJJZCI6IjVmZDcyY2RjYTJhNmQxM2U2MmRiMjkwOSIsImV4cCI6MTk2ODc0Mjg0MH0.VbO1JZQRSVOPXIUb79iMiIAUt5wURbeuoPCi4QjDMlk' };
+    connection.open();
+
+    // add event listeners for the incoming events
+    connection.on(Events.CONNECT, connect);
+    connection.on(Events.CONNECT_ERROR, connectError);
+    connection.on(Events.DISCONNECT, disconnect);
+    connection.on(Events.ROOM_STATUS, roomStatus);
+    connection.on(Events.UPDATE_CURRENT_TRACK, updateCurrentTrack);
+    connection.on(Events.UPDATE_VOLUME, updateVolume);
+
+    return () => {
+      connection.off(Events.CONNECT, connect);
+      connection.off(Events.CONNECT_ERROR, connectError);
+      connection.off(Events.ROOM_STATUS, disconnect);
+      connection.off(Events.ROOM_STATUS, roomStatus);
+      connection.off(Events.UPDATE_CURRENT_TRACK, updateCurrentTrack);
+      connection.off(Events.UPDATE_VOLUME, updateVolume);
+
+      connection.close();
+    };
+  }, []);
 
   /**
    * Handle playback controls
@@ -114,14 +134,13 @@ export const PlaybackControl = (): JSX.Element => {
       if (!connection.connected) {
         return false;
       }
-
       return connection.emit(event);
     },
-    [connection],
+    [],
   );
 
   /**
-   * Handle player volume
+   * Handle player volume change
    * @param {number|string} value - volume value
    * @returns {boolean|SocketIOClient.Socket}
    */
@@ -130,7 +149,6 @@ export const PlaybackControl = (): JSX.Element => {
       if (!connection.connected) {
         return false;
       }
-      console.log('emit from mobile')
       return connection.emit(
         Events.UPDATE_VOLUME,
         {

@@ -6,6 +6,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import Navigation from './navigation';
 import { persistor, store } from './store';
+import IoContext, { connection } from './contexts/socket-io';
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 
@@ -20,8 +21,10 @@ export default () => {
       <SafeAreaProvider>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
-            <Navigation colorScheme={colorScheme} />
-            <StatusBar />
+            <IoContext.Provider value={connection}>
+              <Navigation colorScheme={colorScheme} />
+              <StatusBar />
+            </IoContext.Provider>
           </PersistGate>
         </Provider>
       </SafeAreaProvider>
