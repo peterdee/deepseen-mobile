@@ -33,5 +33,10 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-around',
     width: '100%',
-  }
+  },
+  volumeRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
 });

@@ -24,6 +24,7 @@ export interface Track {
 export interface ControlsProps {
   elapsed: number;
   handleControls: (value: string) => boolean | typeof Socket;
+  handleMute: () => boolean | void;
   handleVolume: (value: number | string) => boolean | typeof Socket;
   isMuted: boolean;
   isPlaying: boolean;

@@ -187,6 +187,26 @@ export const PlaybackControl = (): JSX.Element => {
   );
 
   /**
+   * Handle volume muting
+   * @returns {boolean|SocketIOClient.Socket}
+   */
+  const handleMute = useCallback(
+    (): boolean | void => {
+      if (!connection.connected) {
+        return false;
+      }
+      connection.emit(
+        Events.UPDATE_MUTE,
+        {
+          isMuted: !isMuted,
+        },
+      );
+      return setIsMuted(!isMuted);
+    },
+    [isMuted, setIsMuted],
+  );
+
+  /**
    * Handle player volume change
    * @param {number|string} value - volume value
    * @returns {boolean|SocketIOClient.Socket}
@@ -196,6 +216,8 @@ export const PlaybackControl = (): JSX.Element => {
       if (!connection.connected) {
         return false;
       }
+      setIsMuted(false);
+      setVolume(Number(value));
       return connection.emit(
         Events.UPDATE_VOLUME,
         {
@@ -203,7 +225,7 @@ export const PlaybackControl = (): JSX.Element => {
         },
       );
     },
-    [],
+    [setIsMuted, setVolume, volume],
   );
 
   return (
@@ -213,6 +235,7 @@ export const PlaybackControl = (): JSX.Element => {
           <Controls
             elapsed={elapsed}
             handleControls={handleControls}
+            handleMute={handleMute}
             handleVolume={handleVolume}
             isMuted={isMuted}
             isPlaying={isPlaying}

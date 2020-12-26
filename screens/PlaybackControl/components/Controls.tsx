@@ -16,7 +16,9 @@ import { Text, View } from '../../../components/Themed';
 export const Controls = (props: ControlsProps): JSX.Element => {
   const {
     handleControls,
+    handleMute,
     handleVolume,
+    isMuted,
     isPlaying,
     track,
     volume,
@@ -32,16 +34,24 @@ export const Controls = (props: ControlsProps): JSX.Element => {
         lightColor="#eee"
         darkColor="rgba(255,255,255,0.1)"
       />
-      <Slider
-        minimumValue={0}
-        maximumValue={100}
-        minimumTrackTintColor="#000000"
-        maximumTrackTintColor="#000000"
-        onSlidingComplete={handleVolume}
-        step={1}
-        style={{width: 200, height: 40}}
-        value={volume}
-      />
+      <View style={styles.volumeRow}>
+        <Slider
+          minimumValue={0}
+          maximumValue={100}
+          minimumTrackTintColor="#000000"
+          maximumTrackTintColor="#000000"
+          onSlidingComplete={handleVolume}
+          step={1}
+          style={{width: 200, height: 40}}
+          value={isMuted ? 0 : volume}
+        />
+        <Button
+          onPress={handleMute}
+          title={`${isMuted ? 'Unmute' : 'Mute'}`}
+        >
+          { isMuted ? 'UNMUTE' : 'MUTE' }
+        </Button>
+      </View>
       <View style={styles.controls}>
         <Button
           onPress={() => handleControls(Events.PLAY_PREVIOUS)}
