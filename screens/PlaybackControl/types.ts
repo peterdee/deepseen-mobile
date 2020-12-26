@@ -52,6 +52,11 @@ export interface UpdateCurrentTrackData {
   track: Track;
 };
 
+export interface UpdatePlaybackStateData {
+  isPlaying: boolean;
+  target: string;
+};
+
 export interface UpdateVolumeData {
   target: string;
   volume: number | string;

@@ -16,6 +16,7 @@ import {
   RoomStatusData,
   Track,
   UpdateCurrentTrackData,
+  UpdatePlaybackStateData,
   UpdateVolumeData,
 } from './types';
 import { RootState } from '../../store';
@@ -75,7 +76,7 @@ export const PlaybackControl = (): JSX.Element => {
       setIsPlaying(isPlaying);
       setProgress(progress);
       setTrack(track);
-      return setVolume(volume);
+      return setVolume(Math.round(Number(volume) * 100));
     },
     [],
   );
@@ -119,6 +120,17 @@ export const PlaybackControl = (): JSX.Element => {
     [],
   );
 
+  // handle incoming UPDATE_PLAYBACK_STATE event
+  const updatePlaybackState = useCallback(
+    (data: UpdatePlaybackStateData) => {
+      const { isPlaying: incoming = false, target = '' } = data;
+      if (target === CLIENT_TYPE) {
+        setIsPlaying(incoming);
+      }
+    },
+    [],
+  );
+
   // handle incoming UPDATE_VOLUME event
   const updateVolume = useCallback(
     (data: UpdateVolumeData) => {
@@ -142,6 +154,7 @@ export const PlaybackControl = (): JSX.Element => {
     connection.on(Events.DISCONNECT, disconnect);
     connection.on(Events.ROOM_STATUS, roomStatus);
     connection.on(Events.UPDATE_CURRENT_TRACK, updateCurrentTrack);
+    connection.on(Events.UPDATE_PLAYBACK_STATE, updatePlaybackState);
     connection.on(Events.UPDATE_VOLUME, updateVolume);
 
     return () => {
@@ -151,6 +164,7 @@ export const PlaybackControl = (): JSX.Element => {
       connection.off(Events.DISCONNECT, disconnect);
       connection.off(Events.ROOM_STATUS, roomStatus);
       connection.off(Events.UPDATE_CURRENT_TRACK, updateCurrentTrack);
+      connection.off(Events.UPDATE_PLAYBACK_STATE, updatePlaybackState);
       connection.off(Events.UPDATE_VOLUME, updateVolume);
 
       connection.close();

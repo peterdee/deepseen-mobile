@@ -10,5 +10,6 @@ export interface EventsList {
   ROOM_STATUS: string;
   STOP_PLAYBACK: string;
   UPDATE_CURRENT_TRACK: string;
+  UPDATE_PLAYBACK_STATE: string;
   UPDATE_VOLUME: string;
 };
