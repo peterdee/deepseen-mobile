@@ -8,10 +8,16 @@ import formatName from '../../../utilities/format-track-name';
 import { styles } from '../styles';
 import { Text, View } from '../../../components/Themed';
 
+/**
+ * Display playback controls
+ * @param {ControlsProps} props - component props
+ * @returns {JSX.Element}
+ */
 export const Controls = (props: ControlsProps): JSX.Element => {
   const {
     handleControls,
     handleVolume,
+    isPlaying,
     track,
     volume,
   } = props;
@@ -51,9 +57,9 @@ export const Controls = (props: ControlsProps): JSX.Element => {
         </Button>
         <Button
           onPress={() => handleControls(Events.PLAY_PAUSE)}
-          title="Play"
+          title={`${isPlaying ? 'Pause' : 'Play'}`}
         >
-          PLAY
+          { isPlaying ? 'PAUSE' : 'PLAY' }
         </Button>
         <Button
           onPress={() => handleControls(Events.PLAY_NEXT)}

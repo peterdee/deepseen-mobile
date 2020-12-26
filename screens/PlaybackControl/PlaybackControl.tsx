@@ -12,6 +12,7 @@ import Events from '../../constants/Events';
 import IoContext from '../../contexts/socket-io';
 import { View } from '../../components/Themed';
 import {
+  DesktopInitData,
   RoomStatusData,
   Track,
   UpdateCurrentTrackData,
@@ -34,7 +35,11 @@ export const PlaybackControl = (): JSX.Element => {
   const [track, setTrack] = useState({} as Track);
 
   const [desktopConnected, setDesktopConnected] = useState(false);
+  const [elapsed, setElapsed] = useState(0);
+  const [isMuted, setIsMuted] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [mobileConnected, setMobileConnected] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [volume, setVolume] = useState(0);
 
   // handle incoming connect event
@@ -46,6 +51,32 @@ export const PlaybackControl = (): JSX.Element => {
   // handle incoming connect_error event
   const connectError = useCallback(
     (error: any) => console.log('-> CONNECT_ERROR\n', JSON.stringify(error)),
+    [],
+  );
+
+  // handle incoming DESKTOP_INIT event
+  const desktopInit = useCallback(
+    (data: DesktopInitData) => {
+      const {
+        elapsed = 0,
+        isMuted = false,
+        isPlaying = false,
+        progress = 0,
+        target = '',
+        track,
+        volume = 0,
+      } = data;
+      if (!(target && target === CLIENT_TYPE)) {
+        return false;
+      }
+
+      setElapsed(elapsed);
+      setIsMuted(isMuted);
+      setIsPlaying(isPlaying);
+      setProgress(progress);
+      setTrack(track);
+      return setVolume(volume);
+    },
     [],
   );
 
@@ -107,6 +138,7 @@ export const PlaybackControl = (): JSX.Element => {
     // add event listeners for the incoming events
     connection.on(Events.CONNECT, connect);
     connection.on(Events.CONNECT_ERROR, connectError);
+    connection.on(Events.DESKTOP_INIT, desktopInit);
     connection.on(Events.DISCONNECT, disconnect);
     connection.on(Events.ROOM_STATUS, roomStatus);
     connection.on(Events.UPDATE_CURRENT_TRACK, updateCurrentTrack);
@@ -115,7 +147,8 @@ export const PlaybackControl = (): JSX.Element => {
     return () => {
       connection.off(Events.CONNECT, connect);
       connection.off(Events.CONNECT_ERROR, connectError);
-      connection.off(Events.ROOM_STATUS, disconnect);
+      connection.off(Events.DESKTOP_INIT, desktopInit);
+      connection.off(Events.DISCONNECT, disconnect);
       connection.off(Events.ROOM_STATUS, roomStatus);
       connection.off(Events.UPDATE_CURRENT_TRACK, updateCurrentTrack);
       connection.off(Events.UPDATE_VOLUME, updateVolume);
@@ -164,8 +197,12 @@ export const PlaybackControl = (): JSX.Element => {
       { desktopConnected && mobileConnected
         ? (
           <Controls
+            elapsed={elapsed}
             handleControls={handleControls}
             handleVolume={handleVolume}
+            isMuted={isMuted}
+            isPlaying={isPlaying}
+            progress={progress}
             track={track}
             volume={volume}
           />

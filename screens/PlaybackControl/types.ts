@@ -22,11 +22,15 @@ export interface Track {
 };
 
 export interface ControlsProps {
+  elapsed: number;
   handleControls: (value: string) => boolean | typeof Socket;
   handleVolume: (value: number | string) => boolean | typeof Socket;
+  isMuted: boolean;
+  isPlaying: boolean;
+  progress: number;
   track: Track;
   volume: number;
-}
+};
 
 export interface DesktopInitData {
   elapsed: number;
@@ -56,4 +60,4 @@ export interface UpdateVolumeData {
 export type IncomingEvent = UpdateCurrentTrackData
 | DesktopInitData
 | RoomStatusData
-| Target
+| Target;
