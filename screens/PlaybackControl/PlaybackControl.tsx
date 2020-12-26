@@ -16,6 +16,7 @@ import {
   RoomStatusData,
   Track,
   UpdateCurrentTrackData,
+  UpdateMuteData,
   UpdatePlaybackStateData,
   UpdateVolumeData,
 } from './types';
@@ -114,7 +115,21 @@ export const PlaybackControl = (): JSX.Element => {
     (data: UpdateCurrentTrackData): void => {
       const { target = '', track } = data;
       if (target === CLIENT_TYPE) {
+        if (!isPlaying) {
+          setIsPlaying(true);
+        }
         setTrack(track);
+      }
+    },
+    [],
+  );
+
+  // handle incoming UPDATE_MUTE event
+  const updateMute = useCallback(
+    (data: UpdateMuteData): void => {
+      const { isMuted: incoming = false, target = '' } = data;
+      if (target === CLIENT_TYPE) {
+        setIsMuted(incoming);
       }
     },
     [],
@@ -154,6 +169,7 @@ export const PlaybackControl = (): JSX.Element => {
     connection.on(Events.DISCONNECT, disconnect);
     connection.on(Events.ROOM_STATUS, roomStatus);
     connection.on(Events.UPDATE_CURRENT_TRACK, updateCurrentTrack);
+    connection.on(Events.UPDATE_MUTE, updateMute);
     connection.on(Events.UPDATE_PLAYBACK_STATE, updatePlaybackState);
     connection.on(Events.UPDATE_VOLUME, updateVolume);
 
@@ -164,6 +180,7 @@ export const PlaybackControl = (): JSX.Element => {
       connection.off(Events.DISCONNECT, disconnect);
       connection.off(Events.ROOM_STATUS, roomStatus);
       connection.off(Events.UPDATE_CURRENT_TRACK, updateCurrentTrack);
+      connection.off(Events.UPDATE_MUTE, updateMute);
       connection.off(Events.UPDATE_PLAYBACK_STATE, updatePlaybackState);
       connection.off(Events.UPDATE_VOLUME, updateVolume);
 

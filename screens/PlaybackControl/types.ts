@@ -53,6 +53,11 @@ export interface UpdateCurrentTrackData {
   track: Track;
 };
 
+export interface UpdateMuteData {
+  isMuted: boolean;
+  target: string;
+};
+
 export interface UpdatePlaybackStateData {
   isPlaying: boolean;
   target: string;
