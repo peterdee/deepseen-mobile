@@ -48,6 +48,10 @@ export interface RoomStatusData {
   target: string;
 };
 
+export interface StopPlaybackData {
+  target: string;
+};
+
 export interface UpdateCurrentTrackData {
   target: string;
   track: Track;

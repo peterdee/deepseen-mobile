@@ -15,6 +15,7 @@ import {
   DesktopInitData,
   RoomStatusData,
   Track,
+  StopPlaybackData,
   UpdateCurrentTrackData,
   UpdateMuteData,
   UpdatePlaybackStateData,
@@ -110,6 +111,19 @@ export const PlaybackControl = (): JSX.Element => {
     [],
   );
 
+  // handle incoming STOP_PLAYBACK event
+  const stopPlayback = useCallback(
+    (data: StopPlaybackData): void => {
+      const { target = '' } = data;
+      if (target === CLIENT_TYPE) {
+        setElapsed(0);
+        setIsPlaying(false);
+        setProgress(0);
+      }
+    },
+    [],
+  );
+
   // handle incoming UPDATE_CURRENT_TRACK event
   const updateCurrentTrack = useCallback(
     (data: UpdateCurrentTrackData): void => {
@@ -168,6 +182,7 @@ export const PlaybackControl = (): JSX.Element => {
     connection.on(Events.DESKTOP_INIT, desktopInit);
     connection.on(Events.DISCONNECT, disconnect);
     connection.on(Events.ROOM_STATUS, roomStatus);
+    connection.on(Events.STOP_PLAYBACK, stopPlayback);
     connection.on(Events.UPDATE_CURRENT_TRACK, updateCurrentTrack);
     connection.on(Events.UPDATE_MUTE, updateMute);
     connection.on(Events.UPDATE_PLAYBACK_STATE, updatePlaybackState);
@@ -179,6 +194,7 @@ export const PlaybackControl = (): JSX.Element => {
       connection.off(Events.DESKTOP_INIT, desktopInit);
       connection.off(Events.DISCONNECT, disconnect);
       connection.off(Events.ROOM_STATUS, roomStatus);
+      connection.off(Events.STOP_PLAYBACK, stopPlayback);
       connection.off(Events.UPDATE_CURRENT_TRACK, updateCurrentTrack);
       connection.off(Events.UPDATE_MUTE, updateMute);
       connection.off(Events.UPDATE_PLAYBACK_STATE, updatePlaybackState);
