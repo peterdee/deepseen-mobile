@@ -19,12 +19,14 @@ export interface Track {
   path: string;
   size: number;
   type: string;
+  url: string;
 };
 
 export interface ControlsProps {
   elapsed: number;
   handleControls: (value: string) => boolean | typeof Socket;
   handleMute: () => boolean | void;
+  handleProgress: (value: number | string) => boolean | typeof Socket;
   handleVolume: (value: number | string) => boolean | typeof Socket;
   isMuted: boolean;
   isPlaying: boolean;
@@ -64,6 +66,11 @@ export interface UpdateMuteData {
 
 export interface UpdatePlaybackStateData {
   isPlaying: boolean;
+  target: string;
+};
+
+export interface UpdateProgressData {
+  progress: number | string;
   target: string;
 };
 

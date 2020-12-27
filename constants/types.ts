@@ -12,5 +12,6 @@ export interface EventsList {
   UPDATE_CURRENT_TRACK: string;
   UPDATE_MUTE: string;
   UPDATE_PLAYBACK_STATE: string;
+  UPDATE_PROGRESS: string;
   UPDATE_VOLUME: string;
 };

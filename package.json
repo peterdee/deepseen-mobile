@@ -30,6 +30,7 @@
     "React Native",
     "Redux",
     "Socket.IO",
+    "Typescript",
     "Websockets"
   ],
   "license": "MIT",

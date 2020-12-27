@@ -5,6 +5,7 @@ import Slider from '@react-native-community/slider';
 import { ControlsProps } from '../types';
 import Events from '../../../constants/Events';
 import formatName from '../../../utilities/format-track-name';
+import formatTime from '../../../utilities/format-time';
 import { styles } from '../styles';
 import { Text, View } from '../../../components/Themed';
 
@@ -15,11 +16,14 @@ import { Text, View } from '../../../components/Themed';
  */
 export const Controls = (props: ControlsProps): JSX.Element => {
   const {
+    elapsed,
     handleControls,
     handleMute,
+    handleProgress,
     handleVolume,
     isMuted,
     isPlaying,
+    progress,
     track,
     volume,
   } = props;
@@ -77,6 +81,26 @@ export const Controls = (props: ControlsProps): JSX.Element => {
         >
           NEXT
         </Button>
+      </View>
+      <View
+        style={{
+          ...styles.controls,
+          marginTop: 36,
+        }}
+      >
+        <Text>
+          { formatTime(elapsed) } / { formatTime(track.duration) }
+        </Text>
+        <Slider
+          minimumValue={0}
+          maximumValue={200}
+          minimumTrackTintColor="#000000"
+          maximumTrackTintColor="#000000"
+          onSlidingComplete={handleProgress}
+          step={1}
+          style={{width: 200, height: 40}}
+          value={progress}
+        />
       </View>
     </View>
   );

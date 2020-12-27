@@ -19,6 +19,7 @@ import {
   UpdateCurrentTrackData,
   UpdateMuteData,
   UpdatePlaybackStateData,
+  UpdateProgressData,
   UpdateVolumeData,
 } from './types';
 import { RootState } from '../../store';
@@ -35,7 +36,6 @@ export const PlaybackControl = (): JSX.Element => {
   const connection = useContext(IoContext);
 
   const auth = useSelector((state: RootState) => state.auth);
-  const [track, setTrack] = useState({} as Track);
 
   const [desktopConnected, setDesktopConnected] = useState(false);
   const [elapsed, setElapsed] = useState(0);
@@ -43,6 +43,7 @@ export const PlaybackControl = (): JSX.Element => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [mobileConnected, setMobileConnected] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [track, setTrack] = useState({} as Track);
   const [volume, setVolume] = useState(0);
 
   // handle incoming connect event
@@ -61,26 +62,26 @@ export const PlaybackControl = (): JSX.Element => {
   const desktopInit = useCallback(
     (data: DesktopInitData) => {
       const {
-        elapsed = 0,
-        isMuted = false,
-        isPlaying = false,
-        progress = 0,
+        elapsed: incomingElapsed = 0,
+        isMuted: incomingIsMuted = false,
+        isPlaying: incomingIsPlaying = false,
+        progress: incomingProgress = 0,
         target = '',
-        track,
-        volume = 0,
+        track: incomingTrack = {} as Track,
+        volume: incomingVolume = 0,
       } = data;
       if (!(target && target === CLIENT_TYPE)) {
         return false;
       }
-
-      setElapsed(elapsed);
-      setIsMuted(isMuted);
-      setIsPlaying(isPlaying);
-      setProgress(progress);
-      setTrack(track);
-      return setVolume(Math.round(Number(volume) * 100));
+      console.log('desktopInit', data);
+      setElapsed(incomingElapsed);
+      setIsMuted(incomingIsMuted);
+      setIsPlaying(incomingIsPlaying);
+      setProgress(incomingProgress);
+      setTrack({ ...incomingTrack });
+      return setVolume(Math.round(Number(incomingVolume) * 100));
     },
-    [],
+    [setTrack, track],
   );
 
   // handle incoming disconnect event
@@ -127,12 +128,14 @@ export const PlaybackControl = (): JSX.Element => {
   // handle incoming UPDATE_CURRENT_TRACK event
   const updateCurrentTrack = useCallback(
     (data: UpdateCurrentTrackData): void => {
-      const { target = '', track } = data;
+      const { target = '', track: incomingTrack } = data;
       if (target === CLIENT_TYPE) {
         if (!isPlaying) {
           setIsPlaying(true);
         }
-        setTrack(track);
+        setElapsed(0);
+        setProgress(0);
+        setTrack({ ...incomingTrack });
       }
     },
     [],
@@ -158,6 +161,23 @@ export const PlaybackControl = (): JSX.Element => {
       }
     },
     [],
+  );
+
+  // handle incoming UPDATE_PROGRESS event
+  const updateProgress = useCallback(
+    (data: UpdateProgressData) => {
+      const { progress: incomingProgress = 0, target = '' } = data;
+      if (target === CLIENT_TYPE) {
+        // TODO: track is not accessible, fix that
+        console.log('handle progress update', track, elapsed)
+        if (track && track.duration) {
+          console.log('here')
+          setElapsed((Number(track.duration) / 200) * Number(incomingProgress));
+        }
+        setProgress(Number(incomingProgress));
+      }
+    },
+    [setElapsed, setProgress, setTrack, track],
   );
 
   // handle incoming UPDATE_VOLUME event
@@ -186,6 +206,7 @@ export const PlaybackControl = (): JSX.Element => {
     connection.on(Events.UPDATE_CURRENT_TRACK, updateCurrentTrack);
     connection.on(Events.UPDATE_MUTE, updateMute);
     connection.on(Events.UPDATE_PLAYBACK_STATE, updatePlaybackState);
+    connection.on(Events.UPDATE_PROGRESS, updateProgress);
     connection.on(Events.UPDATE_VOLUME, updateVolume);
 
     return () => {
@@ -198,6 +219,7 @@ export const PlaybackControl = (): JSX.Element => {
       connection.off(Events.UPDATE_CURRENT_TRACK, updateCurrentTrack);
       connection.off(Events.UPDATE_MUTE, updateMute);
       connection.off(Events.UPDATE_PLAYBACK_STATE, updatePlaybackState);
+      connection.off(Events.UPDATE_PROGRESS, updateProgress);
       connection.off(Events.UPDATE_VOLUME, updateVolume);
 
       connection.close();
@@ -261,6 +283,30 @@ export const PlaybackControl = (): JSX.Element => {
     [setIsMuted, setVolume, volume],
   );
 
+  /**
+   * Handle track progress change
+   * @param {number|string} value - progress value
+   * @returns {boolean|SocketIOClient.Socket}
+   */
+  const handleProgress = useCallback(
+    (value: number | string): boolean | typeof Socket => {
+      if (!connection.connected) {
+        return false;
+      }
+      if (track && track.duration) {
+        setElapsed((Number(track.duration) / 200) * Number(value));
+      }
+      setProgress(Number(value));
+      return connection.emit(
+        Events.UPDATE_PROGRESS,
+        {
+          progress: value,
+        },
+      );
+    },
+    [elapsed, progress, setElapsed, setProgress, track],
+  );
+
   return (
     <View style={styles.container}>
       { desktopConnected && mobileConnected
@@ -269,6 +315,7 @@ export const PlaybackControl = (): JSX.Element => {
             elapsed={elapsed}
             handleControls={handleControls}
             handleMute={handleMute}
+            handleProgress={handleProgress}
             handleVolume={handleVolume}
             isMuted={isMuted}
             isPlaying={isPlaying}
