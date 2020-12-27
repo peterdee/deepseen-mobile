@@ -14,6 +14,7 @@ import { View } from '../../components/Themed';
 import {
   ClientDisconnectedData,
   DesktopInitData,
+  NewClientConnectedData,
   RoomStatusData,
   Track,
   StopPlaybackData,
@@ -63,7 +64,7 @@ export const PlaybackControl = (): JSX.Element => {
   const clientDisconnected = useCallback(
     (data: ClientDisconnectedData) => {
       const { client = '' } = data;
-      if (client === CLIENT_TYPES.desktop) {
+      if (client && client === CLIENT_TYPES.desktop) {
         setDesktopConnected(false);
       }
     },
@@ -100,6 +101,17 @@ export const PlaybackControl = (): JSX.Element => {
   const disconnect = useCallback(
     () => setMobileConnected(false),
     [],
+  );
+
+  // handle incoming NEW_CLIENT_CONNECTED event
+  const newClientConnected = useCallback(
+    (data: NewClientConnectedData) => {
+      const { client = '' } = data;
+      if (client && client === CLIENT_TYPES.desktop) {
+        setDesktopConnected(true);
+      }
+    },
+    [setDesktopConnected],
   );
 
   // handle incoming ROOM_STATUS event
@@ -214,6 +226,7 @@ export const PlaybackControl = (): JSX.Element => {
     connection.on(Events.CONNECT_ERROR, connectError);
     connection.on(Events.DESKTOP_INIT, desktopInit);
     connection.on(Events.DISCONNECT, disconnect);
+    connection.on(Events.NEW_CLIENT_CONNECTED, newClientConnected);
     connection.on(Events.ROOM_STATUS, roomStatus);
     connection.on(Events.STOP_PLAYBACK, stopPlayback);
     connection.on(Events.UPDATE_CURRENT_TRACK, updateCurrentTrack);
@@ -228,6 +241,7 @@ export const PlaybackControl = (): JSX.Element => {
       connection.off(Events.CONNECT_ERROR, connectError);
       connection.off(Events.DESKTOP_INIT, desktopInit);
       connection.off(Events.DISCONNECT, disconnect);
+      connection.off(Events.NEW_CLIENT_CONNECTED, newClientConnected);
       connection.off(Events.ROOM_STATUS, roomStatus);
       connection.off(Events.STOP_PLAYBACK, stopPlayback);
       connection.off(Events.UPDATE_CURRENT_TRACK, updateCurrentTrack);

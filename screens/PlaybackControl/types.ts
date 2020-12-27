@@ -49,6 +49,10 @@ export interface DesktopInitData {
   volume: number;
 };
 
+export interface NewClientConnectedData {
+  client: string;
+};
+
 export interface RoomStatusData {
   room: ClientRecord[];
   target: string;
