@@ -2,15 +2,13 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from 'react';
 import { Socket } from 'socket.io-client';
 import { useSelector } from 'react-redux';
 
 import { CLIENT_TYPE, CLIENT_TYPES } from '../../constants/Values';
-import Events from '../../constants/Events';
-import IoContext from '../../contexts/socket-io';
-import { View } from '../../components/Themed';
 import {
   ClientDisconnectedData,
   DesktopInitData,
@@ -24,6 +22,9 @@ import {
   UpdateProgressData,
   UpdateVolumeData,
 } from './types';
+import Events from '../../constants/Events';
+import IoContext from '../../contexts/socket-io';
+import { View } from '../../components/Themed';
 import { RootState } from '../../store';
 import { styles } from './styles';
 
@@ -48,10 +49,19 @@ export const PlaybackControl = (): JSX.Element => {
   const [track, setTrack] = useState({} as Track);
   const [volume, setVolume] = useState(0);
 
+  // store track in a ref
+  const trackRef = useRef({ ...track });
+  useEffect(
+    () => {
+      trackRef.current = { ...track };
+    },
+    [track],
+  );
+
   // handle incoming connect event
   const connect = useCallback(
     () => setMobileConnected(true),
-    [],
+    [setMobileConnected],
   );
 
   // handle incoming connect_error event
@@ -86,12 +96,12 @@ export const PlaybackControl = (): JSX.Element => {
       if (!(target && target === CLIENT_TYPE)) {
         return false;
       }
-      console.log('desktopInit', data);
+
       setElapsed(incomingElapsed);
       setIsMuted(incomingIsMuted);
       setIsPlaying(incomingIsPlaying);
       setProgress(incomingProgress);
-      setTrack({ ...incomingTrack });
+      setTrack(incomingTrack);
       return setVolume(Math.round(Number(incomingVolume) * 100));
     },
     [setTrack, track],
@@ -100,7 +110,7 @@ export const PlaybackControl = (): JSX.Element => {
   // handle incoming disconnect event
   const disconnect = useCallback(
     () => setMobileConnected(false),
-    [],
+    [setMobileConnected],
   );
 
   // handle incoming NEW_CLIENT_CONNECTED event
@@ -133,7 +143,7 @@ export const PlaybackControl = (): JSX.Element => {
 
       return false;
     },
-    [],
+    [setDesktopConnected],
   );
 
   // handle incoming STOP_PLAYBACK event
@@ -146,7 +156,7 @@ export const PlaybackControl = (): JSX.Element => {
         setProgress(0);
       }
     },
-    [],
+    [setElapsed, setIsPlaying, setProgress],
   );
 
   // handle incoming UPDATE_CURRENT_TRACK event
@@ -159,10 +169,10 @@ export const PlaybackControl = (): JSX.Element => {
         }
         setElapsed(0);
         setProgress(0);
-        setTrack({ ...incomingTrack });
+        setTrack(incomingTrack);
       }
     },
-    [],
+    [setElapsed, setIsPlaying, setProgress, setTrack],
   );
 
   // handle incoming UPDATE_MUTE event
@@ -173,7 +183,7 @@ export const PlaybackControl = (): JSX.Element => {
         setIsMuted(incoming);
       }
     },
-    [],
+    [setIsMuted],
   );
 
   // handle incoming UPDATE_PLAYBACK_STATE event
@@ -184,7 +194,7 @@ export const PlaybackControl = (): JSX.Element => {
         setIsPlaying(incoming);
       }
     },
-    [],
+    [setIsPlaying],
   );
 
   // handle incoming UPDATE_PROGRESS event
@@ -192,11 +202,8 @@ export const PlaybackControl = (): JSX.Element => {
     (data: UpdateProgressData) => {
       const { progress: incomingProgress = 0, target = '' } = data;
       if (target === CLIENT_TYPE) {
-        // TODO: track is not accessible, fix that
-        console.log('handle progress update', track, elapsed)
-        if (track && track.duration) {
-          console.log('here')
-          setElapsed((Number(track.duration) / 200) * Number(incomingProgress));
+        if (trackRef.current && trackRef.current.duration) {
+          setElapsed((Number(trackRef.current.duration) / 200) * Number(incomingProgress));
         }
         setProgress(Number(incomingProgress));
       }
@@ -212,7 +219,7 @@ export const PlaybackControl = (): JSX.Element => {
         setVolume(Math.round(Number(volume) * 100));
       }
     },
-    [],
+    [setVolume],
   );
 
   useEffect(() => {
@@ -321,8 +328,8 @@ export const PlaybackControl = (): JSX.Element => {
       if (!connection.connected) {
         return false;
       }
-      if (track && track.duration) {
-        setElapsed((Number(track.duration) / 200) * Number(value));
+      if (trackRef.current && trackRef.current.duration) {
+        setElapsed((Number(trackRef.current.duration) / 200) * Number(value));
       }
       setProgress(Number(value));
       return connection.emit(
