@@ -35,6 +35,10 @@ export interface ControlsProps {
   volume: number;
 };
 
+export interface ClientDisconnectedData {
+  client: string;
+};
+
 export interface DesktopInitData {
   elapsed: number;
   isMuted: boolean;

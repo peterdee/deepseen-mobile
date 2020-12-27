@@ -1,4 +1,5 @@
 export interface EventsList {
+  CLIENT_DISCONNECTED: string;
   CONNECT: string;
   CONNECT_ERROR: string;
   DESKTOP_INIT: string;

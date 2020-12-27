@@ -12,6 +12,7 @@ import Events from '../../constants/Events';
 import IoContext from '../../contexts/socket-io';
 import { View } from '../../components/Themed';
 import {
+  ClientDisconnectedData,
   DesktopInitData,
   RoomStatusData,
   Track,
@@ -56,6 +57,17 @@ export const PlaybackControl = (): JSX.Element => {
   const connectError = useCallback(
     (error: any) => console.log('-> CONNECT_ERROR\n', JSON.stringify(error)),
     [],
+  );
+
+  // handle incoming CLIENT_DISCONNECTED event
+  const clientDisconnected = useCallback(
+    (data: ClientDisconnectedData) => {
+      const { client = '' } = data;
+      if (client === CLIENT_TYPES.desktop) {
+        setDesktopConnected(false);
+      }
+    },
+    [setDesktopConnected],
   );
 
   // handle incoming DESKTOP_INIT event
@@ -197,6 +209,7 @@ export const PlaybackControl = (): JSX.Element => {
     connection.open();
 
     // add event listeners for the incoming events
+    connection.on(Events.CLIENT_DISCONNECTED, clientDisconnected);
     connection.on(Events.CONNECT, connect);
     connection.on(Events.CONNECT_ERROR, connectError);
     connection.on(Events.DESKTOP_INIT, desktopInit);
@@ -210,6 +223,7 @@ export const PlaybackControl = (): JSX.Element => {
     connection.on(Events.UPDATE_VOLUME, updateVolume);
 
     return () => {
+      connection.off(Events.CLIENT_DISCONNECTED, clientDisconnected);
       connection.off(Events.CONNECT, connect);
       connection.off(Events.CONNECT_ERROR, connectError);
       connection.off(Events.DESKTOP_INIT, desktopInit);
