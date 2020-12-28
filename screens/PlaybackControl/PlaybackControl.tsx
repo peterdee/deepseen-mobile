@@ -46,7 +46,7 @@ export const PlaybackControl = (): JSX.Element => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [mobileConnected, setMobileConnected] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [progressTimer, setProgressTimer] = useState(0);
+  // const [progressTimer, setProgressTimer] = useState(0);
   const [track, setTrack] = useState({} as Track);
   const [volume, setVolume] = useState(0);
 
@@ -60,14 +60,14 @@ export const PlaybackControl = (): JSX.Element => {
   );
 
   // store progress timer in a ref
-  const progressTimerRef = useRef(progressTimer);
-  useEffect(
-    () => {
-      progressTimerRef.current = progressTimer;
-      return () => clearInterval(progressTimer);
-    },
-    [progressTimer],
-  );
+  // const progressTimerRef = useRef(progressTimer);
+  // useEffect(
+  //   () => {
+  //     progressTimerRef.current = progressTimer;
+  //     return () => clearInterval(progressTimer);
+  //   },
+  //   [progressTimer],
+  // );
 
   // handle incoming connect event
   const connect = useCallback(
@@ -176,12 +176,14 @@ export const PlaybackControl = (): JSX.Element => {
       const { target = '', track: incomingTrack } = data;
       if (target === CLIENT_TYPE) {
         if (!isPlaying) {
-          const timer = window.setInterval(() => {
-            // TODO: finalize this
-            setElapsed((state) => (state + 1));
-            setProgress((state) => (state + 0.25));
-          }, 250);
-          setProgressTimer(timer);
+          // const timer = window.setInterval(() => {
+          //   // TODO: finalize this
+          //   setElapsed((state) => {
+          //     setProgress(state / (incomingTrack.duration / 200));
+          //     return (state + 0.5);
+          //   });
+          // }, 500);
+          // setProgressTimer(timer);
           setIsPlaying(true);
         }
         setElapsed(0);

@@ -94,7 +94,7 @@ export const Controls = (props: ControlsProps): JSX.Element => {
         <Slider
           minimumValue={0}
           maximumValue={200}
-          minimumTrackTintColor="#000000"
+          minimumTrackTintColor="turquoise"
           maximumTrackTintColor="#000000"
           onSlidingComplete={handleProgress}
           step={1}
