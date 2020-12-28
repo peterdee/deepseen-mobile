@@ -1,3 +1,12 @@
+export interface FormProps {
+  handleInput: (input: string, value: string) => void,
+  handleSubmit: () => Promise<void>,
+  email: string;
+  error: string;
+  loading: boolean;
+  password: string;
+};
+
 export interface UserData {
   created: number;
   email: string;
@@ -6,7 +15,7 @@ export interface UserData {
   lastName: string;
   role: string;
   updated: number;
-}
+};
 
 export interface SignInResponse {
   data: {

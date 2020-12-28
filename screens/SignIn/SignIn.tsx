@@ -1,23 +1,23 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import axios from 'axios';
-import {
-  Pressable,
-  Text, 
-  TextInput,
-  View,
-} from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { SignInResponse } from './types';
-import { RootStackParamList } from '../../types';
-import { styles } from './styles';
 import { CLIENT_TYPE } from '../../constants/Values';
+import Form, { formInputs } from './components/Form';
+import { RootStackParamList } from '../../types';
 import { RootState } from '../../store';
+import { setAuthentication, setToken } from '../../store/auth/actions';
+import { SignInResponse } from './types';
+import { storeData } from '../../store/user/actions';
 
 export const SignIn = (
   { navigation }: StackScreenProps<RootStackParamList, 'SignIn'>,
-) => {
+): JSX.Element => {
   const isAuthenticated = useSelector<RootState, boolean>(
     (state) => state.auth.isAuthenticated,
   );
@@ -25,28 +25,30 @@ export const SignIn = (
     (state) => state.auth.token,
   );
 
+  // check if signed in
   useEffect(
     () => {
       async function checkAccess() {
-      if (isAuthenticated && token) {
-        // get user record to check if token is valid
-        try {
-          setLoading(true);
-          await axios({
-            headers: {
-              Authorization: token,
-            },
-            method: 'GET',
-            url: 'https://deepseen-backend.herokuapp.com/api/user',
-          });
-          setLoading(false);
-          navigation.replace('Root');
-        } catch {
-          setLoading(false);
+        if (isAuthenticated && token) {
+          // get user record to check if token is valid
+          try {
+            setLoading(true);
+            await axios({
+              headers: {
+                Authorization: token,
+              },
+              method: 'GET',
+              // TODO: backend URL should be loaded from an environment variable
+              url: 'https://deepseen-backend.herokuapp.com/api/user',
+            });
+            setLoading(false);
+            navigation.replace('Root');
+          } catch {
+            setLoading(false);
+          }
         }
       }
-    }
-    checkAccess();
+      checkAccess();
     },
     [],
   );
@@ -66,10 +68,12 @@ export const SignIn = (
    */
   const handleInput = (input: string, value: string) => {
     setError('');
-    if (input === 'email') {
+    if (input === formInputs.email.name) {
       return setEmail(value);
     }
-    return setPassword(value);
+    if (input === formInputs.password.name) {
+      return setPassword(value);
+    }
   }
 
   /**
@@ -92,58 +96,38 @@ export const SignIn = (
             password: password.trim(),
           },
           method: 'POST',
+          // TODO: backend URL should be loaded from an environment variable
           url: 'https://deepseen-backend.herokuapp.com/api/auth/signin',
         });
-        console.log('response', data);
+
         setLoading(false);
-        // TODO: set token and user data before redirecting
-        // return navigation.replace('Root');
-      } catch (error) {
-        console.log(error);
+        dispatch(setAuthentication({ isAuthenticated: true }));
+        dispatch(setToken({ token: data.data.token }));
+        dispatch(storeData({
+          email: data.data.user.email,
+          firstName: data.data.user.firstName,
+          id: data.data.user.id,
+          lastName: data.data.user.lastName,
+        }));
+
+        return navigation.replace('Root');
+      } catch {
         setLoading(false);
-        return setError('Error!');
+        // TODO: show a proper message depending on the error
+        return setError('Access denied!');
       }
     },
-    [email, error, password, setError],
+    [email, error, loading, password, setError, setLoading],
   );
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        autoCapitalize="none"
-        editable={!loading}
-        onChangeText={(value) => handleInput('email', value)}
-        placeholder="Email"
-        style={{ height: 40, borderColor: 'gray', borderWidth: 1, width: '80%', color: 'white' }}
-        value={email}
-      />
-      <TextInput
-        autoCapitalize="none"
-        editable={!loading}
-        onChangeText={(value) => handleInput('password', value)}
-        placeholder="Password"
-        secureTextEntry
-        style={{ height: 40, borderColor: 'gray', borderWidth: 1, width: '80%', color: 'white' }}
-        value={password}
-      />
-      <View style={{ height: 40 }}>
-        <Text
-          style={{ color: 'white' }}
-        >
-          { !loading && error ? error : '' }
-        </Text>
-      </View>
-      <Pressable
-        disabled={loading}
-        onPress={handleSubmit}
-        style={styles.button}
-      >
-        <Text
-          style={{ color: 'white' }}
-        >
-          Sign In
-        </Text>
-      </Pressable>
-    </View>
+    <Form
+      handleInput={handleInput}
+      handleSubmit={handleSubmit}
+      email={email}
+      error={error}
+      loading={loading}
+      password={password}
+    />
   );
 };
