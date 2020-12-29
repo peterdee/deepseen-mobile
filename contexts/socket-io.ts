@@ -1,9 +1,10 @@
 import { createContext } from 'react';
 import io, { Socket } from 'socket.io-client';
 
+import { WEBSOCKETS_URL } from '../configuration';
+
 export const connection: typeof Socket = io(
-  // TODO: this should be an environemnt variable
-  'https://deepseen-ws.herokuapp.com',
+  WEBSOCKETS_URL,
   {
     autoConnect: false,
     reconnection: true,

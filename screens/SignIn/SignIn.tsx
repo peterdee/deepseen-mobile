@@ -7,6 +7,7 @@ import axios from 'axios';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { BACKEND_URL } from '../../configuration';
 import { CLIENT_TYPE } from '../../constants/Values';
 import Form, { formInputs } from './components/Form';
 import { RootStackParamList } from '../../types';
@@ -38,8 +39,7 @@ export const SignIn = (
                 Authorization: token,
               },
               method: 'GET',
-              // TODO: backend URL should be loaded from an environment variable
-              url: 'https://deepseen-backend.herokuapp.com/api/user',
+              url: `${BACKEND_URL}/api/user`,
             });
             setLoading(false);
             navigation.replace('Root');
@@ -96,8 +96,7 @@ export const SignIn = (
             password: password.trim(),
           },
           method: 'POST',
-          // TODO: backend URL should be loaded from an environment variable
-          url: 'https://deepseen-backend.herokuapp.com/api/auth/signin',
+          url: `${BACKEND_URL}/api/auth/signin`,
         });
 
         setLoading(false);

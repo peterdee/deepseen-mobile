@@ -27,6 +27,7 @@
   },
   "keywords": [
     "Deepseen",
+    "Expo",
     "React Native",
     "Redux",
     "Socket.IO",
@@ -43,6 +44,7 @@
     "@react-navigation/native": "^5.7.3",
     "@react-navigation/stack": "^5.9.0",
     "axios": "^0.21.1",
+    "babel-plugin-inline-dotenv": "^1.6.0",
     "expo": "^40.0.0",
     "expo-asset": "~8.2.1",
     "expo-constants": "~9.3.3",
