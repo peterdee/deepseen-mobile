@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from 'react-native';
 import Slider from '@react-native-community/slider';
 
+import colors from '../../../constants/Colors';
 import { ControlsProps } from '../types';
 import Events from '../../../constants/Events';
 import formatName from '../../../utilities/format-track-name';
@@ -33,17 +34,12 @@ export const Controls = (props: ControlsProps): JSX.Element => {
       <Text style={styles.title}>
         { formatName(track.name) }
       </Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
       <View style={styles.volumeRow}>
         <Slider
           minimumValue={0}
           maximumValue={100}
-          minimumTrackTintColor="#000000"
-          maximumTrackTintColor="#000000"
+          minimumTrackTintColor={colors.accent}
+          maximumTrackTintColor="#ffffff"
           onSlidingComplete={handleVolume}
           step={1}
           style={{width: 200, height: 40}}
@@ -82,20 +78,15 @@ export const Controls = (props: ControlsProps): JSX.Element => {
           NEXT
         </Button>
       </View>
-      <View
-        style={{
-          ...styles.controls,
-          marginTop: 36,
-        }}
-      >
-        <Text>
+      <View style={styles.controls}>
+        <Text style={styles.times}>
           { formatTime(elapsed) } / { formatTime(track.duration) }
         </Text>
         <Slider
           minimumValue={0}
           maximumValue={200}
-          minimumTrackTintColor="turquoise"
-          maximumTrackTintColor="#000000"
+          minimumTrackTintColor={colors.accent}
+          maximumTrackTintColor="#ffffff"
           onSlidingComplete={handleProgress}
           step={1}
           style={{width: 200, height: 40}}
