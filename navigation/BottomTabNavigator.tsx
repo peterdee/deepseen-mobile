@@ -3,10 +3,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 
+import { Account }  from '../screens/Account';
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import { PlaybackControl } from '../screens/PlaybackControl';
-import TabTwoScreen from '../screens/TabTwoScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
@@ -18,7 +18,7 @@ export default function BottomTabNavigator() {
     <BottomTab.Navigator
       initialRouteName="PlaybackControl"
       tabBarOptions={{
-        activeTintColor: Colors[colorScheme].tint,
+        activeTintColor: Colors.accent,
         showLabel: false,
       }}
     >
@@ -42,7 +42,7 @@ export default function BottomTabNavigator() {
 
 // You can explore the built-in icon families and icons on the web at:
 // https://icons.expo.fyi/
-function TabBarIcon(props: { name: string; color: string }) {
+function TabBarIcon(props: { name: any; color: string }) {
   return <Ionicons size={30} style={{ marginBottom: -3 }} {...props} />;
 }
 
@@ -56,7 +56,12 @@ function TabOneNavigator() {
       <PlaybackControlStack.Screen
         name="TabOneScreen"
         component={PlaybackControl}
-        options={{ headerTitle: 'Playback Control' }}
+        options={{
+          headerStyle: {
+            backgroundColor: 'black',
+          },
+          headerTitle: 'Playback Control',
+        }}
       />
     </PlaybackControlStack.Navigator>
   );
@@ -69,8 +74,13 @@ function TabTwoNavigator() {
     <TabTwoStack.Navigator>
       <TabTwoStack.Screen
         name="TabTwoScreen"
-        component={TabTwoScreen}
-        options={{ headerTitle: 'Account' }}
+        component={Account}
+        options={{
+          headerStyle: {
+            backgroundColor: 'black',
+          },
+          headerTitle: 'Account',
+        }}
       />
     </TabTwoStack.Navigator>
   );

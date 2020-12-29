@@ -8,6 +8,7 @@ import {
 
 import colors from '../../../constants/Colors';
 import { FormProps } from '../types';
+import Loader from '../../../components/Loader';
 import { styles } from '../styles';
 
 export const formInputs = {
@@ -38,42 +39,49 @@ export default (props: FormProps): JSX.Element => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
-        SIGN IN
-      </Text>
-      <TextInput
-        autoCapitalize="none"
-        editable={!loading}
-        onChangeText={(value) => handleInput(formInputs.email.name, value)}
-        placeholder={formInputs.email.placeholder}
-        placeholderTextColor={colors.inputPlaceholder}
-        style={[styles.input, loading ? styles.inputDisabled : null]}
-        value={email}
-      />
-      <TextInput
-        autoCapitalize="none"
-        editable={!loading}
-        onChangeText={(value) => handleInput(formInputs.password.name, value)}
-        placeholder={formInputs.password.placeholder}
-        placeholderTextColor={colors.inputPlaceholder}
-        secureTextEntry
-        style={[styles.input, loading ? styles.inputDisabled : null]}
-        value={password}
-      />
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>
-          { !loading && error ? error : '' }
-        </Text>
-      </View>
-      <Pressable
-        disabled={loading}
-        onPress={handleSubmit}
-        style={[styles.button, loading ? styles.buttonDisabled : null]}
-      >
-        <Text style={[styles.buttonText, loading ? styles.buttonTextDisabled : null]}>
-          SUBMIT
-        </Text>
-      </Pressable>
+      { loading && (
+        <Loader />
+      ) }
+      { !loading && (
+        <View style={styles.container}>
+          <Text style={styles.title}>
+            SIGN IN
+          </Text>
+          <TextInput
+            autoCapitalize="none"
+            editable={!loading}
+            onChangeText={(value) => handleInput(formInputs.email.name, value)}
+            placeholder={formInputs.email.placeholder}
+            placeholderTextColor={colors.inputPlaceholder}
+            style={[styles.input, loading ? styles.inputDisabled : null]}
+            value={email}
+          />
+          <TextInput
+            autoCapitalize="none"
+            editable={!loading}
+            onChangeText={(value) => handleInput(formInputs.password.name, value)}
+            placeholder={formInputs.password.placeholder}
+            placeholderTextColor={colors.inputPlaceholder}
+            secureTextEntry
+            style={[styles.input, loading ? styles.inputDisabled : null]}
+            value={password}
+          />
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorText}>
+              { !loading && error ? error : '' }
+            </Text>
+          </View>
+          <Pressable
+            disabled={loading}
+            onPress={handleSubmit}
+            style={[styles.button, loading ? styles.buttonDisabled : null]}
+          >
+            <Text style={[styles.buttonText, loading ? styles.buttonTextDisabled : null]}>
+              SUBMIT
+            </Text>
+          </Pressable>
+        </View>
+      ) }
     </View>
   );
 };
