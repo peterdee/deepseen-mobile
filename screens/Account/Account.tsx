@@ -9,6 +9,7 @@ import { RootState } from '../../store';
 import { setAuthentication, setToken } from '../../store/auth/actions';
 import { styles } from './styles';
 import { Text, View } from '../../components/Themed';
+import { UserState } from '../../store/user/types';
 
 export const Account = (
   { navigation }: StackScreenProps<RootStackParamList, 'Root'>,
@@ -20,6 +21,7 @@ export const Account = (
   const token = useSelector<RootState, string>(
     (state) => state.auth.token,
   );
+  const user = useSelector<RootState, UserState>((state) => state.user);
 
   // check if authenticated
   useEffect(
@@ -40,6 +42,19 @@ export const Account = (
 
   return (
     <View style={styles.container}>
+      <View style={styles.userData}>
+        <View style={styles.initials}>
+          <Text style={styles.initialsText}>
+            { `${user.firstName[0] || ''}${user.lastName[0] || ''}` }
+          </Text>
+        </View>
+        <Text style={styles.userName}>
+          { user.firstName } { user.lastName }
+        </Text>
+      </View>
+      <Text style={styles.email}>
+        { user.email }
+      </Text>
       <Pressable
         onPress={handleLogout}
         style={styles.button}

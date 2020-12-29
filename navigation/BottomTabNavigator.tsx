@@ -19,7 +19,15 @@ export default function BottomTabNavigator() {
       initialRouteName="PlaybackControl"
       tabBarOptions={{
         activeTintColor: Colors.accent,
+        inactiveTintColor: Colors.tabIconInactive,
         showLabel: false,
+        style: {
+          backgroundColor: 'black',
+          borderTopWidth: 0,
+        },
+        tabStyle: {
+          backgroundColor: 'black',
+        },
       }}
     >
       <BottomTab.Screen
@@ -50,6 +58,15 @@ function TabBarIcon(props: { name: any; color: string }) {
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
 const PlaybackControlStack = createStackNavigator<TabOneParamList>();
 
+const commonHeaderOptions = {
+  headerStyle: {
+    backgroundColor: 'black',
+  },
+  headerTitleStyle: {
+    color: 'white',
+  },
+};
+
 function TabOneNavigator() {
   return (
     <PlaybackControlStack.Navigator>
@@ -57,9 +74,7 @@ function TabOneNavigator() {
         name="TabOneScreen"
         component={PlaybackControl}
         options={{
-          headerStyle: {
-            backgroundColor: 'black',
-          },
+          ...commonHeaderOptions,
           headerTitle: 'Playback Control',
         }}
       />
@@ -76,9 +91,7 @@ function TabTwoNavigator() {
         name="TabTwoScreen"
         component={Account}
         options={{
-          headerStyle: {
-            backgroundColor: 'black',
-          },
+          ...commonHeaderOptions,
           headerTitle: 'Account',
         }}
       />

@@ -10,27 +10,39 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
   },
-  title: {
-    color: colors.accent,
+  userData: {
+    alignItems: 'center',
+    backgroundColor: 'black',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 16,
+  },
+  initials: {
+    alignItems: 'center',
+    backgroundColor: colors.accent,
+    borderRadius: 50,
+    color: 'black',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    height: 64,
+    width: 64,
+  },
+  initialsText: {
+    color: 'black',
     fontSize: 24,
     fontWeight: 'bold',
-    letterSpacing: 5,
-    marginBottom: 48,
   },
-  input: {
-    backgroundColor: colors.inputBackground,
-    borderColor: colors.inputBackground,
-    borderRadius: 5,
-    borderWidth: 2,
+  userName: {
+    color: 'white',
+    fontSize: 20,
+    marginLeft: 16,
+  },
+  email: {
     color: 'white',
     fontSize: 16,
-    marginBottom: 16,
-    padding: 16,
-    width: '80%',
-  },
-  inputDisabled: {
-    backgroundColor: colors.inputBackgroundDisabled,
-    borderColor: colors.inputBackgroundDisabled,
+    marginBottom: 48,
   },
   button: {
     alignItems: 'center',
@@ -44,22 +56,8 @@ export const styles = StyleSheet.create({
     padding: 16,
     width: '80%',
   },
-  buttonDisabled: {
-    borderColor: colors.accentMuted,
-  },
   buttonText: {
     color: colors.accent,
-    fontSize: 16,
-  },
-  buttonTextDisabled: {
-    color: colors.accentMuted,
-  },
-  errorContainer: {
-    height: 20,
-    marginBottom: 16,
-  },
-  errorText: {
-    color: colors.error,
     fontSize: 16,
   },
 });

@@ -11,6 +11,7 @@ export default {
   inputBackground: '#343434',
   inputBackgroundDisabled: '#121212',
   inputPlaceholder: '#979797',
+  tabIconInactive: '#363636',
   light: {
     text: '#000',
     background: '#fff',
@@ -22,7 +23,7 @@ export default {
     text: '#fff',
     background: '#000',
     tint: tintColorDark,
-    tabIconDefault: '#ccc',
+    tabIconDefault: '#555',
     tabIconSelected: tintColorDark,
   },
 };
