@@ -50,6 +50,7 @@ export default (props: FormProps): JSX.Element => {
           <TextInput
             autoCapitalize="none"
             editable={!loading}
+            keyboardType="email-address"
             onChangeText={(value) => handleInput(formInputs.email.name, value)}
             placeholder={formInputs.email.placeholder}
             placeholderTextColor={colors.inputPlaceholder}
