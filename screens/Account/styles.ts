@@ -47,7 +47,7 @@ export const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
     backgroundColor: 'black',
-    borderColor: colors.accent,
+    borderColor: colors.error,
     borderRadius: 5,
     borderWidth: 2,
     display: 'flex',
@@ -57,7 +57,7 @@ export const styles = StyleSheet.create({
     width: '80%',
   },
   buttonText: {
-    color: colors.accent,
+    color: colors.error,
     fontSize: 16,
   },
 });

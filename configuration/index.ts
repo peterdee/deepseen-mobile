@@ -1,5 +1,5 @@
 // Load environment variables
 export const {
-  BACKEND_URL = 'http://localhost:1337',
-  WEBSOCKETS_URL = 'http://localhost:9500',
+  BACKEND_URL = 'https://deepseen-backend.herokuapp.com',
+  WEBSOCKETS_URL = 'https://deepseen-ws.herokuapp.com',
 } = process.env;
