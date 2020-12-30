@@ -1,10 +1,17 @@
 import { StyleSheet } from 'react-native';
 
+import colors from '../../constants/Colors';
+
 export const styles = StyleSheet.create({
   button: {
-    backgroundColor: 'black',
-    color: 'white',
-    width: '200px',
+    alignItems: 'center',
+    backgroundColor: colors.tabIconInactive,
+    borderRadius: 50,
+    display: 'flex',
+    flexDirection: 'row',
+    height: 64,
+    justifyContent: 'center',
+    width: 64,
   },
   container: {
     alignItems: 'center',
@@ -14,6 +21,7 @@ export const styles = StyleSheet.create({
     width: '100%',
   },
   controls: {
+    alignItems: 'center',
     backgroundColor: 'black',
     display: 'flex',
     flexDirection: 'row',
@@ -28,10 +36,13 @@ export const styles = StyleSheet.create({
   },
   title: {
     color: 'white',
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 48,
+    marginLeft: 'auto',
+    marginRight: 'auto',
     textAlign: 'center',
+    width: '80%',
   },
   trackInfo: {
     backgroundColor: 'black',
@@ -41,6 +52,7 @@ export const styles = StyleSheet.create({
     width: '100%',
   },
   volumeRow: {
+    alignItems: 'center',
     backgroundColor: 'black',
     display: 'flex',
     flexDirection: 'row',
@@ -48,5 +60,6 @@ export const styles = StyleSheet.create({
   },
   times: {
     color: 'white',
+    fontSize: 16,
   },
 });

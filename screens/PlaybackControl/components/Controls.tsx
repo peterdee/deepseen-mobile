@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button } from 'react-native';
+import { FontAwesome5 } from '@expo/vector-icons'; 
+import { Pressable } from 'react-native';
 import Slider from '@react-native-community/slider';
 
 import colors from '../../../constants/Colors';
@@ -45,42 +46,57 @@ export const Controls = (props: ControlsProps): JSX.Element => {
           style={{width: 200, height: 40}}
           value={isMuted ? 0 : volume}
         />
-        <Button
-          onPress={handleMute}
-          title={`${isMuted ? 'Unmute' : 'Mute'}`}
-        >
-          { isMuted ? 'UNMUTE' : 'MUTE' }
-        </Button>
+        <Pressable onPress={handleMute}>
+          { isMuted && (
+            <FontAwesome5 name="volume-mute" size={24} color={colors.accent} />
+          ) }
+          { !isMuted && (
+            <FontAwesome5 name="volume-up" size={24} color={colors.accent} />
+          ) }
+        </Pressable>
       </View>
       <View style={styles.controls}>
-        <Button
-          onPress={() => handleControls(Events.PLAY_PREVIOUS)}
-          title="Previous"
-        >
-          PREVIOUS
-        </Button>
-        <Button
-          onPress={() => handleControls(Events.STOP_PLAYBACK)}
-          title="Stop"
-        >
-          STOP
-        </Button>
-        <Button
-          onPress={() => handleControls(Events.PLAY_PAUSE)}
-          title={`${isPlaying ? 'Pause' : 'Play'}`}
-        >
-          { isPlaying ? 'PAUSE' : 'PLAY' }
-        </Button>
-        <Button
-          onPress={() => handleControls(Events.PLAY_NEXT)}
-          title="Next"
-        >
-          NEXT
-        </Button>
+        <Pressable onPress={() => handleControls(Events.PLAY_PREVIOUS)}>
+          <FontAwesome5
+            color={colors.accent}
+            name="backward"
+            size={24}
+          />
+        </Pressable>
+        <Pressable onPress={() => handleControls(Events.STOP_PLAYBACK)}>
+          <FontAwesome5
+            color={colors.accent}
+            name="stop"
+            size={24}
+          />
+        </Pressable>
+        <Pressable onPress={() => handleControls(Events.PLAY_PAUSE)}>
+          { isPlaying && (
+            <FontAwesome5
+              color={colors.accent}
+              name="pause"
+              size={24}
+            />
+          ) }
+          { !isPlaying && (
+            <FontAwesome5
+              color={colors.accent}
+              name="play"
+              size={24}
+            />
+          ) }  
+        </Pressable>
+        <Pressable onPress={() => handleControls(Events.PLAY_NEXT)}>
+          <FontAwesome5
+            color={colors.accent}
+            name="forward"
+            size={24}
+          />
+        </Pressable>
       </View>
       <View style={styles.controls}>
         <Text style={styles.times}>
-          { formatTime(elapsed) } / { formatTime(track.duration) }
+          { formatTime(elapsed) }
         </Text>
         <Slider
           minimumValue={0}
@@ -92,6 +108,9 @@ export const Controls = (props: ControlsProps): JSX.Element => {
           style={{width: 200, height: 40}}
           value={progress}
         />
+        <Text style={styles.times}>
+          { formatTime(track.duration) }
+        </Text>
       </View>
     </View>
   );
