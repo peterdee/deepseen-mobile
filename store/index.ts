@@ -4,10 +4,12 @@ import { createLogger } from 'redux-logger';
 import { persistReducer, persistStore } from 'redux-persist';
 
 import { authReducer } from './auth/reducer';
+import { settingsReducer } from './settings/reducer';
 import { userReducer } from './user/reducer';
 
 const rootReducer = combineReducers({
   auth: authReducer,
+  settings: settingsReducer,
   user: userReducer,
 });
 
