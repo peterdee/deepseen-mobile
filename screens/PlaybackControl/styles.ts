@@ -3,16 +3,6 @@ import { StyleSheet } from 'react-native';
 import colors from '../../constants/Colors';
 
 export const styles = StyleSheet.create({
-  button: {
-    alignItems: 'center',
-    backgroundColor: colors.tabIconInactive,
-    borderRadius: 50,
-    display: 'flex',
-    flexDirection: 'row',
-    height: 64,
-    justifyContent: 'center',
-    width: 64,
-  },
   container: {
     alignItems: 'center',
     backgroundColor: 'black',
@@ -29,10 +19,31 @@ export const styles = StyleSheet.create({
     marginTop: 32,
     width: '100%',
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
+  progress: {
+    backgroundColor: 'black',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: 32,
     width: '80%',
+  },
+  progressTimes: {
+    alignItems: 'center',
+    backgroundColor: 'black',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  progressBar: {
+    height: 40,
+    width: '100%',
+  },
+  times: {
+    color: 'white',
+    fontSize: 16,
   },
   title: {
     color: 'white',
@@ -57,9 +68,5 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
-  },
-  times: {
-    color: 'white',
-    fontSize: 16,
   },
 });
