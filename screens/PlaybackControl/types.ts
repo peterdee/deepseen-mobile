@@ -43,7 +43,10 @@ export interface DesktopInitData {
   elapsed: number;
   isMuted: boolean;
   isPlaying: boolean;
+  loop: boolean;
   progress: number;
+  queue: number;
+  shuffle: boolean;
   target: string;
   track: Track;
   volume: number;

@@ -38,15 +38,17 @@ import { NotConnected } from './components/NotConnected';
 export const PlaybackControl = (): JSX.Element => {
   const connection = useContext(IoContext);
 
-  const auth = useSelector((state: RootState) => state.auth);
+  const token = useSelector((state: RootState) => state.auth.token);
 
   const [desktopConnected, setDesktopConnected] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [loop, setLoop] = useState(false);
   const [mobileConnected, setMobileConnected] = useState(false);
   const [progress, setProgress] = useState(0);
-  // const [progressTimer, setProgressTimer] = useState(0);
+  const [queue, setQueue] = useState(0);
+  const [shuffle, setShuffle] = useState(false);
   const [track, setTrack] = useState({} as Track);
   const [volume, setVolume] = useState(0);
 
@@ -58,16 +60,6 @@ export const PlaybackControl = (): JSX.Element => {
     },
     [track],
   );
-
-  // store progress timer in a ref
-  // const progressTimerRef = useRef(progressTimer);
-  // useEffect(
-  //   () => {
-  //     progressTimerRef.current = progressTimer;
-  //     return () => clearInterval(progressTimer);
-  //   },
-  //   [progressTimer],
-  // );
 
   // handle incoming connect event
   const connect = useCallback(
@@ -99,7 +91,10 @@ export const PlaybackControl = (): JSX.Element => {
         elapsed: incomingElapsed = 0,
         isMuted: incomingIsMuted = false,
         isPlaying: incomingIsPlaying = false,
+        loop: incomingLoop = false,
         progress: incomingProgress = 0,
+        queue: incomingQueue = 0,
+        shuffle: incomingShuffle = false,
         target = '',
         track: incomingTrack = {} as Track,
         volume: incomingVolume = 0,
@@ -111,7 +106,10 @@ export const PlaybackControl = (): JSX.Element => {
       setElapsed(incomingElapsed);
       setIsMuted(incomingIsMuted);
       setIsPlaying(incomingIsPlaying);
+      setLoop(incomingLoop);
       setProgress(incomingProgress);
+      setQueue(incomingQueue);
+      setShuffle(incomingShuffle);
       setTrack(incomingTrack);
       return setVolume(Math.round(Number(incomingVolume) * 100));
     },
@@ -176,14 +174,6 @@ export const PlaybackControl = (): JSX.Element => {
       const { target = '', track: incomingTrack } = data;
       if (target === CLIENT_TYPE) {
         if (!isPlaying) {
-          // const timer = window.setInterval(() => {
-          //   // TODO: finalize this
-          //   setElapsed((state) => {
-          //     setProgress(state / (incomingTrack.duration / 200));
-          //     return (state + 0.5);
-          //   });
-          // }, 500);
-          // setProgressTimer(timer);
           setIsPlaying(true);
         }
         setElapsed(0);
@@ -243,7 +233,7 @@ export const PlaybackControl = (): JSX.Element => {
 
   useEffect(() => {
     // set token and open the Socket.IO connection
-    connection.io.opts.query = { token: auth.token || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOiJtb2JpbGUiLCJpbWFnZSI6IiQyYSQxMCRCRVhGUDhSdVpKeUJtZ2ltREtUcWNPakl4V2llN2s0UUxjVHFZcS54SU5UNzVNeHU1S3c2QyIsInVzZXJJZCI6IjVmZDcyY2RjYTJhNmQxM2U2MmRiMjkwOSIsImV4cCI6MTk2ODc0Mjg0MH0.VbO1JZQRSVOPXIUb79iMiIAUt5wURbeuoPCi4QjDMlk' };
+    connection.io.opts.query = { token };
     connection.open();
 
     // add event listeners for the incoming events
