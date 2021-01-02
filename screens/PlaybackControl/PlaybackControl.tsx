@@ -14,6 +14,7 @@ import {
   DesktopInitData,
   NewClientConnectedData,
   RoomStatusData,
+  Target,
   Track,
   StopPlaybackData,
   UpdateCurrentTrackData,
@@ -59,6 +60,17 @@ export const PlaybackControl = (): JSX.Element => {
       trackRef.current = { ...track };
     },
     [track],
+  );
+
+  // handle incoming CLEAR_QUEUE event
+  const clearQueue = useCallback(
+    (data: Target) => {
+      const { target = '' } = data;
+      if (target === CLIENT_TYPE) {
+        setQueue(0);
+      }
+    },
+    [queue, setQueue],
   );
 
   // handle incoming connect event
@@ -237,6 +249,7 @@ export const PlaybackControl = (): JSX.Element => {
     connection.open();
 
     // add event listeners for the incoming events
+    connection.on(Events.CLEAR_QUEUE, clearQueue);
     connection.on(Events.CLIENT_DISCONNECTED, clientDisconnected);
     connection.on(Events.CONNECT, connect);
     connection.on(Events.CONNECT_ERROR, connectError);
@@ -252,6 +265,7 @@ export const PlaybackControl = (): JSX.Element => {
     connection.on(Events.UPDATE_VOLUME, updateVolume);
 
     return () => {
+      connection.off(Events.CLEAR_QUEUE, clearQueue);
       connection.off(Events.CLIENT_DISCONNECTED, clientDisconnected);
       connection.off(Events.CONNECT, connect);
       connection.off(Events.CONNECT_ERROR, connectError);

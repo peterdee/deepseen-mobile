@@ -2,6 +2,7 @@ import { EventsList } from './types';
 
 // Possible events
 export default {
+  CLEAR_QUEUE: 'CLEAR_QUEUE',
   CLIENT_DISCONNECTED: 'CLIENT_DISCONNECTED',
   CONNECT: 'connect',
   CONNECT_ERROR: 'connect_error',

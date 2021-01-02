@@ -1,4 +1,5 @@
 export interface EventsList {
+  CLEAR_QUEUE: string;
   CLIENT_DISCONNECTED: string;
   CONNECT: string;
   CONNECT_ERROR: string;
