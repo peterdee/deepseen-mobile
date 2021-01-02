@@ -18,9 +18,12 @@ import {
   Track,
   StopPlaybackData,
   UpdateCurrentTrackData,
+  UpdateLoopData,
   UpdateMuteData,
   UpdatePlaybackStateData,
   UpdateProgressData,
+  UpdateQueueData,
+  UpdateShuffleData,
   UpdateVolumeData,
 } from './types';
 import Events from '../../constants/Events';
@@ -196,6 +199,17 @@ export const PlaybackControl = (): JSX.Element => {
     [setElapsed, setIsPlaying, setProgress, setTrack],
   );
 
+  // handle incoming UPDATE_LOOP event
+  const updateLoop = useCallback(
+    (data: UpdateLoopData): void => {
+      const { loop: incomingLoop = false, target = '' } = data;
+      if (target === CLIENT_TYPE) {
+        setLoop(incomingLoop);
+      }
+    },
+    [loop, setLoop],
+  );
+
   // handle incoming UPDATE_MUTE event
   const updateMute = useCallback(
     (data: UpdateMuteData): void => {
@@ -232,6 +246,28 @@ export const PlaybackControl = (): JSX.Element => {
     [setElapsed, setProgress, setTrack, track],
   );
 
+  // handle incoming UPDATE_QUEUE event
+  const updateQueue = useCallback(
+    (data: UpdateQueueData): void => {
+      const { queue: incomingQueue = 0, target = '' } = data;
+      if (target === CLIENT_TYPE) {
+        setQueue(incomingQueue);
+      }
+    },
+    [queue, setQueue],
+  );
+
+  // handle incoming UPDATE_SHUFFLE event
+  const updateShuffle = useCallback(
+    (data: UpdateShuffleData): void => {
+      const { shuffle: incomingShuffle = false, target = '' } = data;
+      if (target === CLIENT_TYPE) {
+        setShuffle(incomingShuffle);
+      }
+    },
+    [shuffle, setShuffle],
+  );
+
   // handle incoming UPDATE_VOLUME event
   const updateVolume = useCallback(
     (data: UpdateVolumeData) => {
@@ -259,9 +295,12 @@ export const PlaybackControl = (): JSX.Element => {
     connection.on(Events.ROOM_STATUS, roomStatus);
     connection.on(Events.STOP_PLAYBACK, stopPlayback);
     connection.on(Events.UPDATE_CURRENT_TRACK, updateCurrentTrack);
+    connection.on(Events.UPDATE_LOOP, updateLoop);
     connection.on(Events.UPDATE_MUTE, updateMute);
     connection.on(Events.UPDATE_PLAYBACK_STATE, updatePlaybackState);
     connection.on(Events.UPDATE_PROGRESS, updateProgress);
+    connection.on(Events.UPDATE_QUEUE, updateQueue);
+    connection.on(Events.UPDATE_SHUFFLE, updateShuffle);
     connection.on(Events.UPDATE_VOLUME, updateVolume);
 
     return () => {
@@ -275,9 +314,12 @@ export const PlaybackControl = (): JSX.Element => {
       connection.off(Events.ROOM_STATUS, roomStatus);
       connection.off(Events.STOP_PLAYBACK, stopPlayback);
       connection.off(Events.UPDATE_CURRENT_TRACK, updateCurrentTrack);
+      connection.off(Events.UPDATE_LOOP, updateLoop);
       connection.off(Events.UPDATE_MUTE, updateMute);
       connection.off(Events.UPDATE_PLAYBACK_STATE, updatePlaybackState);
       connection.off(Events.UPDATE_PROGRESS, updateProgress);
+      connection.off(Events.UPDATE_QUEUE, updateQueue);
+      connection.off(Events.UPDATE_SHUFFLE, updateShuffle);
       connection.off(Events.UPDATE_VOLUME, updateVolume);
 
       connection.close();

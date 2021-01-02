@@ -70,6 +70,10 @@ export interface UpdateCurrentTrackData {
   track: Track;
 };
 
+export interface UpdateLoopData extends Target {
+  loop: boolean;
+};
+
 export interface UpdateMuteData {
   isMuted: boolean;
   target: string;
@@ -83,6 +87,14 @@ export interface UpdatePlaybackStateData {
 export interface UpdateProgressData {
   progress: number | string;
   target: string;
+};
+
+export interface UpdateQueueData extends Target {
+  queue: number;
+};
+
+export interface UpdateShuffleData extends Target {
+  shuffle: boolean;
 };
 
 export interface UpdateVolumeData {
