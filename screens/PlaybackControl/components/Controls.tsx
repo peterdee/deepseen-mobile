@@ -26,6 +26,7 @@ export const Controls = (props: ControlsProps): JSX.Element => {
     isMuted,
     isPlaying,
     progress,
+    shuffle,
     track,
     volume,
   } = props;
@@ -76,9 +77,12 @@ export const Controls = (props: ControlsProps): JSX.Element => {
         />
       </View>
       <View style={styles.controls}>
-        <Pressable onPress={() => handleControls(Events.PLAY_PREVIOUS)}>
+        <Pressable
+          disabled={shuffle}
+          onPress={() => handleControls(Events.PLAY_PREVIOUS)}
+        >
           <FontAwesome5
-            color={colors.accent}
+            color={shuffle ? colors.tabIconInactive : colors.accent}
             name="backward"
             size={24}
           />

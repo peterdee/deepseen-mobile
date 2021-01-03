@@ -4,10 +4,19 @@ import colors from '../../constants/Colors';
 
 export const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
     backgroundColor: 'black',
-    flex: 1,
-    justifyContent: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    justifyContent: 'space-around',
+    width: '100%',
+  },
+  trackInfo: {
+    backgroundColor: 'black',
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    justifyContent: 'space-between',
     width: '100%',
   },
   controls: {
@@ -15,9 +24,11 @@ export const styles = StyleSheet.create({
     backgroundColor: 'black',
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
+    marginLeft: 'auto',
+    marginRight: 'auto',
     marginTop: 32,
-    width: '100%',
+    width: '80%',
   },
   progress: {
     backgroundColor: 'black',
@@ -54,13 +65,6 @@ export const styles = StyleSheet.create({
     marginRight: 'auto',
     textAlign: 'center',
     width: '80%',
-  },
-  trackInfo: {
-    backgroundColor: 'black',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-around',
-    width: '100%',
   },
   volumeRow: {
     alignItems: 'center',

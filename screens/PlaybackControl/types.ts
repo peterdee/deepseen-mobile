@@ -31,6 +31,7 @@ export interface ControlsProps {
   isMuted: boolean;
   isPlaying: boolean;
   progress: number;
+  shuffle: boolean;
   track: Track;
   volume: number;
 };

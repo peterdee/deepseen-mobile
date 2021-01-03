@@ -420,6 +420,7 @@ export const PlaybackControl = (): JSX.Element => {
             isMuted={isMuted}
             isPlaying={isPlaying}
             progress={progress}
+            shuffle={shuffle}
             track={track}
             volume={volume}
           />
