@@ -4,7 +4,7 @@ import colors from '../../constants/Colors';
 
 export const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'black',
+    backgroundColor: colors.appBackground,
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
     width: '100%',
   },
   trackInfo: {
-    backgroundColor: 'black',
+    backgroundColor: colors.appBackground,
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
@@ -21,17 +21,18 @@ export const styles = StyleSheet.create({
   },
   controls: {
     alignItems: 'center',
-    backgroundColor: 'black',
+    backgroundColor: colors.appBackground,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: 48,
     marginLeft: 'auto',
     marginRight: 'auto',
     marginTop: 32,
     width: '80%',
   },
   progress: {
-    backgroundColor: 'black',
+    backgroundColor: colors.appBackground,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'flex-start',
@@ -42,7 +43,7 @@ export const styles = StyleSheet.create({
   },
   progressTimes: {
     alignItems: 'center',
-    backgroundColor: 'black',
+    backgroundColor: colors.appBackground,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -61,6 +62,7 @@ export const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 48,
+    marginTop: 48,
     marginLeft: 'auto',
     marginRight: 'auto',
     textAlign: 'center',
@@ -68,7 +70,7 @@ export const styles = StyleSheet.create({
   },
   volumeRow: {
     alignItems: 'center',
-    backgroundColor: 'black',
+    backgroundColor: colors.appBackground,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',

@@ -11,6 +11,8 @@ import formatTime from '../../../utilities/format-time';
 import { styles } from '../styles';
 import { Text, View } from '../../../components/Themed';
 
+const ICON_SIZE = 32;
+
 /**
  * Display playback controls
  * @param {ControlsProps} props - component props
@@ -21,6 +23,7 @@ export const Controls = (props: ControlsProps): JSX.Element => {
     elapsed,
     handleControls,
     handleMute,
+    handleProgressSlidingStart,
     handleProgress,
     handleVolume,
     isMuted,
@@ -39,10 +42,10 @@ export const Controls = (props: ControlsProps): JSX.Element => {
       <View style={styles.volumeRow}>
         <Pressable onPress={handleMute}>
           { isMuted && (
-            <FontAwesome5 name="volume-mute" size={24} color={colors.accent} />
+            <FontAwesome5 name="volume-mute" size={ICON_SIZE} color={colors.accent} />
           ) }
           { !isMuted && (
-            <FontAwesome5 name="volume-up" size={24} color={colors.accent} />
+            <FontAwesome5 name="volume-up" size={ICON_SIZE} color={colors.accent} />
           ) }
         </Pressable>
         <Slider
@@ -70,6 +73,7 @@ export const Controls = (props: ControlsProps): JSX.Element => {
           maximumValue={200}
           minimumTrackTintColor={colors.accent}
           maximumTrackTintColor="#ffffff"
+          onSlidingStart={handleProgressSlidingStart}
           onSlidingComplete={handleProgress}
           step={1}
           style={styles.progressBar}
@@ -84,14 +88,14 @@ export const Controls = (props: ControlsProps): JSX.Element => {
           <FontAwesome5
             color={shuffle ? colors.tabIconInactive : colors.accent}
             name="backward"
-            size={24}
+            size={ICON_SIZE}
           />
         </Pressable>
         <Pressable onPress={() => handleControls(Events.STOP_PLAYBACK)}>
           <FontAwesome5
             color={colors.accent}
             name="stop"
-            size={24}
+            size={ICON_SIZE}
           />
         </Pressable>
         <Pressable onPress={() => handleControls(Events.PLAY_PAUSE)}>
@@ -99,14 +103,14 @@ export const Controls = (props: ControlsProps): JSX.Element => {
             <FontAwesome5
               color={colors.accent}
               name="pause"
-              size={24}
+              size={ICON_SIZE}
             />
           ) }
           { !isPlaying && (
             <FontAwesome5
               color={colors.accent}
               name="play"
-              size={24}
+              size={ICON_SIZE}
             />
           ) }  
         </Pressable>
@@ -114,7 +118,7 @@ export const Controls = (props: ControlsProps): JSX.Element => {
           <FontAwesome5
             color={colors.accent}
             name="forward"
-            size={24}
+            size={ICON_SIZE}
           />
         </Pressable>
       </View>

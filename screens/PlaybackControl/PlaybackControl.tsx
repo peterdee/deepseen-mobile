@@ -45,6 +45,7 @@ export const PlaybackControl = (): JSX.Element => {
   const token = useSelector((state: RootState) => state.auth.token);
 
   const [desktopConnected, setDesktopConnected] = useState(false);
+  const [disableProgressSlider, setDisableProgressSlider] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -64,6 +65,15 @@ export const PlaybackControl = (): JSX.Element => {
     },
     [track],
   );
+
+  // store progress slider status in a ref
+  const sliderRef = useRef(disableProgressSlider);
+  useEffect(
+    () => {
+      sliderRef.current = disableProgressSlider;
+    },
+    [disableProgressSlider],
+  )
 
   // handle incoming CLEAR_QUEUE event
   const clearQueue = useCallback(
@@ -236,7 +246,7 @@ export const PlaybackControl = (): JSX.Element => {
   const updateProgress = useCallback(
     (data: UpdateProgressData) => {
       const { progress: incomingProgress = 0, target = '' } = data;
-      if (target === CLIENT_TYPE) {
+      if (target === CLIENT_TYPE && !sliderRef.current) {
         if (trackRef.current && trackRef.current.duration) {
           setElapsed((Number(trackRef.current.duration) / 200) * Number(incomingProgress));
         }
@@ -396,6 +406,7 @@ export const PlaybackControl = (): JSX.Element => {
       if (trackRef.current && trackRef.current.duration) {
         setElapsed((Number(trackRef.current.duration) / 200) * Number(value));
       }
+      setDisableProgressSlider(false);
       setProgress(Number(value));
       return connection.emit(
         Events.UPDATE_PROGRESS,
@@ -404,7 +415,24 @@ export const PlaybackControl = (): JSX.Element => {
         },
       );
     },
-    [elapsed, progress, setElapsed, setProgress, track],
+    [
+      disableProgressSlider,
+      elapsed,
+      progress,
+      setDisableProgressSlider,
+      setElapsed, 
+      setProgress,
+      track,
+    ],
+  );
+
+  /**
+   * Disable progress slider updates when it is touched
+   * @returns {void}
+   */
+  const handleProgressSlidingStart = useCallback(
+    () => setDisableProgressSlider(true),
+    [disableProgressSlider, setDisableProgressSlider],
   );
 
   return (
@@ -416,6 +444,7 @@ export const PlaybackControl = (): JSX.Element => {
             handleControls={handleControls}
             handleMute={handleMute}
             handleProgress={handleProgress}
+            handleProgressSlidingStart={handleProgressSlidingStart}
             handleVolume={handleVolume}
             isMuted={isMuted}
             isPlaying={isPlaying}

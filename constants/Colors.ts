@@ -5,6 +5,7 @@ export default {
   accent: 'turquoise',
   accentHighlighted: 'rgb(173, 255, 247)',
   accentMuted: 'teal',
+  appBackground: 'black',
   buttonTextLight: 'white',
   buttonTextDark: 'black',
   error: '#ff3915',

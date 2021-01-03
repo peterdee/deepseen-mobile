@@ -27,6 +27,7 @@ export interface ControlsProps {
   handleControls: (value: string) => boolean | typeof Socket;
   handleMute: () => boolean | void;
   handleProgress: (value: number | string) => boolean | typeof Socket;
+  handleProgressSlidingStart: () => void;
   handleVolume: (value: number | string) => boolean | typeof Socket;
   isMuted: boolean;
   isPlaying: boolean;
