@@ -1,5 +1,5 @@
 import React from 'react';
-import { FontAwesome5 } from '@expo/vector-icons'; 
+import { FontAwesome5, MaterialIcons } from '@expo/vector-icons'; 
 import { Pressable } from 'react-native';
 import Slider from '@react-native-community/slider';
 
@@ -10,6 +10,7 @@ import formatName from '../../../utilities/format-track-name';
 import formatTime from '../../../utilities/format-time';
 import { styles } from '../styles';
 import { Text, View } from '../../../components/Themed';
+import { FadeFromBottomAndroid } from '@react-navigation/stack/lib/typescript/src/TransitionConfigs/TransitionPresets';
 
 const ICON_SIZE = 32;
 
@@ -36,16 +37,46 @@ export const Controls = (props: ControlsProps): JSX.Element => {
 
   return (
     <View style={styles.trackInfo}>
+      <View style={styles.progressTimes}>
+        <Pressable
+          disabled={shuffle}
+          onPress={() => handleControls(Events.PLAY_PREVIOUS)}
+        >
+          <FontAwesome5
+            color={colors.accent}
+            name="info-circle"
+            size={ICON_SIZE}
+          />
+        </Pressable>
+        <Pressable
+          disabled={shuffle}
+          onPress={() => handleControls(Events.PLAY_PREVIOUS)}
+        >
+          <MaterialIcons
+            color={colors.accent}
+            name="playlist-play"
+            size={ICON_SIZE}
+          />
+        </Pressable>
+      </View>
       <Text style={styles.title}>
         { formatName(track.name) }
       </Text>
       <View style={styles.volumeRow}>
         <Pressable onPress={handleMute}>
           { isMuted && (
-            <FontAwesome5 name="volume-mute" size={ICON_SIZE} color={colors.accent} />
+            <FontAwesome5
+              color={colors.accent}
+              name="volume-mute"
+              size={ICON_SIZE}
+            />
           ) }
           { !isMuted && (
-            <FontAwesome5 name="volume-up" size={ICON_SIZE} color={colors.accent} />
+            <FontAwesome5
+              color={colors.accent}
+              name="volume-up"
+              size={ICON_SIZE}
+            />
           ) }
         </Pressable>
         <Slider
