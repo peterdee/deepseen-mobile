@@ -11,6 +11,17 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-around',
     width: '100%',
   },
+  topBar: {
+    backgroundColor: colors.appBackground,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 48,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: 32,
+    width: '80%',
+  },
   trackInfo: {
     backgroundColor: colors.appBackground,
     display: 'flex',

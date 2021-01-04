@@ -1,5 +1,5 @@
 import React from 'react';
-import { FontAwesome5, MaterialIcons } from '@expo/vector-icons'; 
+import { FontAwesome5, Ionicons } from '@expo/vector-icons'; 
 import { Pressable } from 'react-native';
 import Slider from '@react-native-community/slider';
 
@@ -10,7 +10,6 @@ import formatName from '../../../utilities/format-track-name';
 import formatTime from '../../../utilities/format-time';
 import { styles } from '../styles';
 import { Text, View } from '../../../components/Themed';
-import { FadeFromBottomAndroid } from '@react-navigation/stack/lib/typescript/src/TransitionConfigs/TransitionPresets';
 
 const ICON_SIZE = 32;
 
@@ -27,6 +26,7 @@ export const Controls = (props: ControlsProps): JSX.Element => {
     handleProgressSlidingStart,
     handleProgress,
     handleVolume,
+    setInfoModalVisible,
     isMuted,
     isPlaying,
     progress,
@@ -37,24 +37,18 @@ export const Controls = (props: ControlsProps): JSX.Element => {
 
   return (
     <View style={styles.trackInfo}>
-      <View style={styles.progressTimes}>
-        <Pressable
-          disabled={shuffle}
-          onPress={() => handleControls(Events.PLAY_PREVIOUS)}
-        >
+      <View style={styles.topBar}>
+        <Pressable onPress={() => setInfoModalVisible(true)}>
           <FontAwesome5
             color={colors.accent}
             name="info-circle"
             size={ICON_SIZE}
           />
         </Pressable>
-        <Pressable
-          disabled={shuffle}
-          onPress={() => handleControls(Events.PLAY_PREVIOUS)}
-        >
-          <MaterialIcons
+        <Pressable>
+          <Ionicons
             color={colors.accent}
-            name="playlist-play"
+            name="settings-sharp"
             size={ICON_SIZE}
           />
         </Pressable>

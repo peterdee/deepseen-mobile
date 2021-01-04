@@ -32,6 +32,7 @@ export interface ControlsProps {
   isMuted: boolean;
   isPlaying: boolean;
   progress: number;
+  setInfoModalVisible: (value: boolean) => void;
   shuffle: boolean;
   track: Track;
   volume: number;
@@ -52,6 +53,11 @@ export interface DesktopInitData {
   target: string;
   track: Track;
   volume: number;
+};
+
+export interface InfoModalProps {
+  infoModalVisible: boolean;
+  track: Track;
 };
 
 export interface NewClientConnectedData {

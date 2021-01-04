@@ -33,6 +33,7 @@ import { RootState } from '../../store';
 import { styles } from './styles';
 
 import { Controls } from './components/Controls';
+import { InfoModal } from './components/InfoModal';
 import { NotConnected } from './components/NotConnected';
 
 /**
@@ -47,6 +48,7 @@ export const PlaybackControl = (): JSX.Element => {
   const [desktopConnected, setDesktopConnected] = useState(false);
   const [disableProgressSlider, setDisableProgressSlider] = useState(false);
   const [elapsed, setElapsed] = useState(0);
+  const [infoModalVisible, setInfoModalVisible] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [loop, setLoop] = useState(false);
@@ -437,6 +439,10 @@ export const PlaybackControl = (): JSX.Element => {
 
   return (
     <View style={styles.container}>
+      <InfoModal
+        infoModalVisible={infoModalVisible}
+        track={track}
+      />
       { desktopConnected && mobileConnected
         ? (
           <Controls
@@ -449,6 +455,7 @@ export const PlaybackControl = (): JSX.Element => {
             isMuted={isMuted}
             isPlaying={isPlaying}
             progress={progress}
+            setInfoModalVisible={setInfoModalVisible}
             shuffle={shuffle}
             track={track}
             volume={volume}
