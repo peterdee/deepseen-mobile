@@ -31,6 +31,7 @@ import IoContext from '../../contexts/socket-io';
 import { View } from '../../components/Themed';
 import { RootState } from '../../store';
 import { styles } from './styles';
+import { useRefState } from '../../hooks/useRefState';
 
 import { Controls } from './components/Controls';
 import { InfoModal } from './components/InfoModal';
@@ -46,7 +47,7 @@ export const PlaybackControl = (): JSX.Element => {
   const token = useSelector((state: RootState) => state.auth.token);
 
   const [desktopConnected, setDesktopConnected] = useState(false);
-  const [disableProgressSlider, setDisableProgressSlider] = useState(false);
+  const [disableProgressSlider, setDisableProgressSlider] = useRefState(false);
   const [elapsed, setElapsed] = useState(0);
   const [infoModalVisible, setInfoModalVisible] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
@@ -67,15 +68,6 @@ export const PlaybackControl = (): JSX.Element => {
     },
     [track],
   );
-
-  // store progress slider status in a ref
-  const sliderRef = useRef(disableProgressSlider);
-  useEffect(
-    () => {
-      sliderRef.current = disableProgressSlider;
-    },
-    [disableProgressSlider],
-  )
 
   // handle incoming CLEAR_QUEUE event
   const clearQueue = useCallback(
@@ -248,7 +240,7 @@ export const PlaybackControl = (): JSX.Element => {
   const updateProgress = useCallback(
     (data: UpdateProgressData) => {
       const { progress: incomingProgress = 0, target = '' } = data;
-      if (target === CLIENT_TYPE && !sliderRef.current) {
+      if (target === CLIENT_TYPE && !disableProgressSlider.current) {
         if (trackRef.current && trackRef.current.duration) {
           setElapsed((Number(trackRef.current.duration) / 200) * Number(incomingProgress));
         }
