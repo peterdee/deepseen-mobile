@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { FontAwesome5, Ionicons } from '@expo/vector-icons'; 
 import { Pressable } from 'react-native';
 import Slider from '@react-native-community/slider';
@@ -10,6 +10,8 @@ import formatName from '../../../utilities/format-track-name';
 import formatTime from '../../../utilities/format-time';
 import { styles } from '../styles';
 import { Text, View } from '../../../components/Themed';
+
+import { InfoModal } from './InfoModal';
 
 const ICON_SIZE = 32;
 
@@ -26,17 +28,32 @@ export const Controls = (props: ControlsProps): JSX.Element => {
     handleProgressSlidingStart,
     handleProgress,
     handleVolume,
-    setInfoModalVisible,
+    infoModalVisible,
     isMuted,
     isPlaying,
     progress,
+    setInfoModalVisible,
     shuffle,
     track,
     volume,
   } = props;
 
+  /**
+   * Handle modal closing
+   * @returns {void}
+   */
+  const closeModal = useCallback(
+    (): void => setInfoModalVisible(false),
+    [setInfoModalVisible],
+  )
+
   return (
     <View style={styles.trackInfo}>
+      <InfoModal
+        closeModal={closeModal}
+        infoModalVisible={infoModalVisible}
+        track={track}
+      />
       <View style={styles.topBar}>
         <Pressable onPress={() => setInfoModalVisible(true)}>
           <FontAwesome5

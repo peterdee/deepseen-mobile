@@ -438,10 +438,6 @@ export const PlaybackControl = (): JSX.Element => {
 
   return (
     <View style={styles.container}>
-      <InfoModal
-        infoModalVisible={infoModalVisible}
-        track={track.current}
-      />
       { desktopConnected && mobileConnected
         ? (
           <Controls
@@ -451,6 +447,7 @@ export const PlaybackControl = (): JSX.Element => {
             handleProgress={handleProgress}
             handleProgressSlidingStart={handleProgressSlidingStart}
             handleVolume={handleVolume}
+            infoModalVisible={infoModalVisible}
             isMuted={isMuted}
             isPlaying={isPlaying}
             progress={progress}

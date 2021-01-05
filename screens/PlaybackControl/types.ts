@@ -29,6 +29,7 @@ export interface ControlsProps {
   handleProgress: (value: number | string) => boolean | typeof Socket;
   handleProgressSlidingStart: () => void;
   handleVolume: (value: number | string) => boolean | typeof Socket;
+  infoModalVisible: boolean;
   isMuted: boolean;
   isPlaying: boolean;
   progress: number;
@@ -56,6 +57,7 @@ export interface DesktopInitData {
 };
 
 export interface InfoModalProps {
+  closeModal: () => void;
   infoModalVisible: boolean;
   track: Track;
 };
