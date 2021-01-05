@@ -57,32 +57,23 @@ export const PlaybackControl = (): JSX.Element => {
   const [progress, setProgress] = useState(0);
   const [queue, setQueue] = useState(0);
   const [shuffle, setShuffle] = useState(false);
-  const [track, setTrack] = useState({} as Track);
+  const [track, setTrack] = useRefState({} as Track);
   const [volume, setVolume] = useState(0);
-
-  // store track in a ref
-  const trackRef = useRef({ ...track });
-  useEffect(
-    () => {
-      trackRef.current = { ...track };
-    },
-    [track],
-  );
 
   // handle incoming CLEAR_QUEUE event
   const clearQueue = useCallback(
-    (data: Target) => {
+    (data: Target): void => {
       const { target = '' } = data;
-      if (target === CLIENT_TYPE) {
+      if (target && target === CLIENT_TYPE) {
         setQueue(0);
       }
     },
-    [queue, setQueue],
+    [setQueue],
   );
 
   // handle incoming connect event
   const connect = useCallback(
-    () => setMobileConnected(true),
+    (): void => setMobileConnected(true),
     [setMobileConnected],
   );
 
@@ -94,7 +85,7 @@ export const PlaybackControl = (): JSX.Element => {
 
   // handle incoming CLIENT_DISCONNECTED event
   const clientDisconnected = useCallback(
-    (data: ClientDisconnectedData) => {
+    (data: ClientDisconnectedData): void => {
       const { client = '' } = data;
       if (client && client === CLIENT_TYPES.desktop) {
         setDesktopConnected(false);
@@ -105,7 +96,7 @@ export const PlaybackControl = (): JSX.Element => {
 
   // handle incoming DESKTOP_INIT event
   const desktopInit = useCallback(
-    (data: DesktopInitData) => {
+    (data: DesktopInitData): boolean | void => {
       const {
         elapsed: incomingElapsed = 0,
         isMuted: incomingIsMuted = false,
@@ -132,18 +123,28 @@ export const PlaybackControl = (): JSX.Element => {
       setTrack(incomingTrack);
       return setVolume(Math.round(Number(incomingVolume) * 100));
     },
-    [setTrack, track],
+    [
+      setElapsed,
+      setIsMuted,
+      setIsPlaying,
+      setLoop,
+      setProgress,
+      setQueue,
+      setShuffle,
+      setTrack,
+      setVolume,
+    ],
   );
 
   // handle incoming disconnect event
   const disconnect = useCallback(
-    () => setMobileConnected(false),
+    (): void => setMobileConnected(false),
     [setMobileConnected],
   );
 
   // handle incoming NEW_CLIENT_CONNECTED event
   const newClientConnected = useCallback(
-    (data: NewClientConnectedData) => {
+    (data: NewClientConnectedData): void => {
       const { client = '' } = data;
       if (client && client === CLIENT_TYPES.desktop) {
         setDesktopConnected(true);
@@ -178,7 +179,7 @@ export const PlaybackControl = (): JSX.Element => {
   const stopPlayback = useCallback(
     (data: StopPlaybackData): void => {
       const { target = '' } = data;
-      if (target === CLIENT_TYPE) {
+      if (target && target === CLIENT_TYPE) {
         setElapsed(0);
         setIsPlaying(false);
         setProgress(0);
@@ -191,7 +192,7 @@ export const PlaybackControl = (): JSX.Element => {
   const updateCurrentTrack = useCallback(
     (data: UpdateCurrentTrackData): void => {
       const { target = '', track: incomingTrack } = data;
-      if (target === CLIENT_TYPE) {
+      if (target && target === CLIENT_TYPE) {
         if (!isPlaying) {
           setIsPlaying(true);
         }
@@ -200,25 +201,30 @@ export const PlaybackControl = (): JSX.Element => {
         setTrack(incomingTrack);
       }
     },
-    [setElapsed, setIsPlaying, setProgress, setTrack],
+    [
+      setElapsed,
+      setIsPlaying,
+      setProgress,
+      setTrack,
+    ],
   );
 
   // handle incoming UPDATE_LOOP event
   const updateLoop = useCallback(
     (data: UpdateLoopData): void => {
       const { loop: incomingLoop = false, target = '' } = data;
-      if (target === CLIENT_TYPE) {
+      if (target && target === CLIENT_TYPE) {
         setLoop(incomingLoop);
       }
     },
-    [loop, setLoop],
+    [setLoop],
   );
 
   // handle incoming UPDATE_MUTE event
   const updateMute = useCallback(
     (data: UpdateMuteData): void => {
       const { isMuted: incoming = false, target = '' } = data;
-      if (target === CLIENT_TYPE) {
+      if (target && target === CLIENT_TYPE) {
         setIsMuted(incoming);
       }
     },
@@ -227,9 +233,9 @@ export const PlaybackControl = (): JSX.Element => {
 
   // handle incoming UPDATE_PLAYBACK_STATE event
   const updatePlaybackState = useCallback(
-    (data: UpdatePlaybackStateData) => {
+    (data: UpdatePlaybackStateData): void => {
       const { isPlaying: incoming = false, target = '' } = data;
-      if (target === CLIENT_TYPE) {
+      if (target && target === CLIENT_TYPE) {
         setIsPlaying(incoming);
       }
     },
@@ -238,46 +244,50 @@ export const PlaybackControl = (): JSX.Element => {
 
   // handle incoming UPDATE_PROGRESS event
   const updateProgress = useCallback(
-    (data: UpdateProgressData) => {
+    (data: UpdateProgressData): void => {
       const { progress: incomingProgress = 0, target = '' } = data;
-      if (target === CLIENT_TYPE && !disableProgressSlider.current) {
-        if (trackRef.current && trackRef.current.duration) {
-          setElapsed((Number(trackRef.current.duration) / 200) * Number(incomingProgress));
+      if (target && target === CLIENT_TYPE && !disableProgressSlider.current) {
+        if (track.current && track.current.duration) {
+          setElapsed((Number(track.current.duration) / 200) * Number(incomingProgress));
         }
         setProgress(Number(incomingProgress));
       }
     },
-    [setElapsed, setProgress, setTrack, track],
+    [
+      setElapsed,
+      setProgress,
+      track,
+    ],
   );
 
   // handle incoming UPDATE_QUEUE event
   const updateQueue = useCallback(
     (data: UpdateQueueData): void => {
       const { queue: incomingQueue = 0, target = '' } = data;
-      if (target === CLIENT_TYPE) {
+      if (target && target === CLIENT_TYPE) {
         setQueue(incomingQueue);
       }
     },
-    [queue, setQueue],
+    [setQueue],
   );
 
   // handle incoming UPDATE_SHUFFLE event
   const updateShuffle = useCallback(
     (data: UpdateShuffleData): void => {
       const { shuffle: incomingShuffle = false, target = '' } = data;
-      if (target === CLIENT_TYPE) {
+      if (target && target === CLIENT_TYPE) {
         setShuffle(incomingShuffle);
       }
     },
-    [shuffle, setShuffle],
+    [setShuffle],
   );
 
   // handle incoming UPDATE_VOLUME event
   const updateVolume = useCallback(
-    (data: UpdateVolumeData) => {
-      const { target = '', volume } = data;
-      if (target === CLIENT_TYPE) {
-        setVolume(Math.round(Number(volume) * 100));
+    (data: UpdateVolumeData): void => {
+      const { target = '', volume: incomingVolume = 0 } = data;
+      if (target && target === CLIENT_TYPE) {
+        setVolume(Math.round(Number(incomingVolume) * 100));
       }
     },
     [setVolume],
@@ -384,7 +394,7 @@ export const PlaybackControl = (): JSX.Element => {
         },
       );
     },
-    [setIsMuted, setVolume, volume],
+    [setIsMuted, setVolume],
   );
 
   /**
@@ -397,8 +407,8 @@ export const PlaybackControl = (): JSX.Element => {
       if (!connection.connected) {
         return false;
       }
-      if (trackRef.current && trackRef.current.duration) {
-        setElapsed((Number(trackRef.current.duration) / 200) * Number(value));
+      if (track.current && track.current.duration) {
+        setElapsed((Number(track.current.duration) / 200) * Number(value));
       }
       setDisableProgressSlider(false);
       setProgress(Number(value));
@@ -410,9 +420,6 @@ export const PlaybackControl = (): JSX.Element => {
       );
     },
     [
-      disableProgressSlider,
-      elapsed,
-      progress,
       setDisableProgressSlider,
       setElapsed, 
       setProgress,
@@ -433,7 +440,7 @@ export const PlaybackControl = (): JSX.Element => {
     <View style={styles.container}>
       <InfoModal
         infoModalVisible={infoModalVisible}
-        track={track}
+        track={track.current}
       />
       { desktopConnected && mobileConnected
         ? (
@@ -449,7 +456,7 @@ export const PlaybackControl = (): JSX.Element => {
             progress={progress}
             setInfoModalVisible={setInfoModalVisible}
             shuffle={shuffle}
-            track={track}
+            track={track.current}
             volume={volume}
           />
         )
@@ -459,4 +466,4 @@ export const PlaybackControl = (): JSX.Element => {
       }
     </View>
   );
-}
+};

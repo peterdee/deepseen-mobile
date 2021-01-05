@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Modal, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
+import { Alert, Modal, Text } from 'react-native';
 
 import { InfoModalProps } from '../types';
 
