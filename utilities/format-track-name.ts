@@ -1,9 +1,10 @@
 /**
  * Format the track name
  * @param {string} name - track name
+ * @param {boolean} showExtension - if file extension should be shown
  * @returns {string}
  */
-export default (name: string): string => {
+export default (name: string, showExtension: boolean = true): string => {
   if (!name) {
     return '';
   }
@@ -15,5 +16,7 @@ export default (name: string): string => {
 
   const partialsLength = partials.length - 1;
   const extension = partials[partialsLength];
-  return `${partials.slice(0, partialsLength).join('.')} [${extension.toUpperCase()}]`;
+  return `${partials.slice(0, partialsLength).join('.')}${showExtension
+    ? ` [${extension.toUpperCase()}]`
+    : ''}`;
 };

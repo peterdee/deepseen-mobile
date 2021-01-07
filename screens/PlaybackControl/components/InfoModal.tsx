@@ -1,6 +1,13 @@
 import React from 'react';
-import { Alert, Modal, Pressable, Text, View } from 'react-native';
+import {
+  Modal,
+  Pressable,
+  Text,
+  View,
+} from 'react-native';
+import { styles } from '../../Account/styles';
 
+import formatTrackName from '../../../utilities/format-track-name';
 import { InfoModalProps } from '../types';
 
 export const InfoModal = (props: InfoModalProps): JSX.Element => {
@@ -15,33 +22,29 @@ export const InfoModal = (props: InfoModalProps): JSX.Element => {
       animationType="fade"
       transparent={true}
       visible={infoModalVisible}
-      onRequestClose={() => {
-        Alert.alert('Modal has been closed.');
-      }}
     >
       <View style={{
+          backgroundColor: 'black',
           flex: 1,
           justifyContent: 'center',
           alignItems: 'center',
-          marginTop: 22,
+          opacity: .9,
         }}
       >
         <Text style={{
-            backgroundColor: 'black',
             color: 'white',
             fontSize: 32,
+            marginBottom: 16,
           }}
         >
-          Modal is visible
+          { formatTrackName(track.name) }
         </Text>
-        <Pressable onPress={closeModal}>
-          <Text style={{
-              backgroundColor: 'black',
-              color: 'white',
-              fontSize: 32,
-            }}
-          >
-            Close
+        <Pressable
+          onPress={closeModal}
+          style={styles.button}
+        >
+          <Text style={styles.buttonText}>
+            CLOSE
           </Text>
         </Pressable>
       </View>

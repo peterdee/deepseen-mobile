@@ -70,9 +70,11 @@ export const Controls = (props: ControlsProps): JSX.Element => {
           />
         </Pressable>
       </View>
-      <Text style={styles.title}>
-        { formatName(track.name) }
-      </Text>
+      <Pressable onLongPress={() => setInfoModalVisible(true)}>
+        <Text style={styles.title}>
+          { formatName(track.name, false) }
+        </Text>
+      </Pressable>
       <View style={styles.volumeRow}>
         <Pressable onPress={handleMute}>
           { isMuted && (

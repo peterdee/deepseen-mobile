@@ -46,8 +46,8 @@ export const styles = StyleSheet.create({
   },
   button: {
     alignItems: 'center',
-    backgroundColor: 'black',
-    borderColor: colors.error,
+    backgroundColor: colors.appBackground,
+    borderColor: colors.accent,
     borderRadius: 5,
     borderWidth: 2,
     display: 'flex',
@@ -57,7 +57,8 @@ export const styles = StyleSheet.create({
     width: '80%',
   },
   buttonText: {
-    color: colors.error,
+    color: colors.accent,
     fontSize: 16,
+    textAlign: 'center',
   },
 });
