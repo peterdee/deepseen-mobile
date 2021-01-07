@@ -12,6 +12,7 @@ export const styles = StyleSheet.create({
     width: '100%',
   },
   topBar: {
+    alignItems: 'center',
     backgroundColor: colors.appBackground,
     display: 'flex',
     flexDirection: 'row',
@@ -62,6 +63,8 @@ export const styles = StyleSheet.create({
   },
   progressBar: {
     height: 40,
+    marginLeft: 0,
+    marginRight: 0,
     width: '100%',
   },
   times: {
@@ -89,7 +92,7 @@ export const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
     backgroundColor: 'black',
-    borderColor: colors.error,
+    borderColor: colors.accent,
     borderRadius: 5,
     borderWidth: 2,
     display: 'flex',
@@ -99,7 +102,7 @@ export const styles = StyleSheet.create({
     width: '80%',
   },
   buttonText: {
-    color: colors.error,
+    color: colors.accent,
     fontSize: 16,
   },
 });

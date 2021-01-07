@@ -34,7 +34,6 @@ import { styles } from './styles';
 import { useRefState } from '../../hooks/useRefState';
 
 import { Controls } from './components/Controls';
-import { InfoModal } from './components/InfoModal';
 import { NotConnected } from './components/NotConnected';
 
 /**
