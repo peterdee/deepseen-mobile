@@ -6,6 +6,7 @@ import {
   View,
 } from 'react-native';
 
+import BigButton from '../../../components/BigButton';
 import colors from '../../../constants/Colors';
 import { FormProps } from '../types';
 import Loader from '../../../components/Loader';
@@ -72,15 +73,11 @@ export default (props: FormProps): JSX.Element => {
               { !loading && error ? error : '' }
             </Text>
           </View>
-          <Pressable
+          <BigButton
             disabled={loading}
             onPress={handleSubmit}
-            style={[styles.button, loading ? styles.buttonDisabled : null]}
-          >
-            <Text style={[styles.buttonText, loading ? styles.buttonTextDisabled : null]}>
-              SUBMIT
-            </Text>
-          </Pressable>
+            text="SUBMIT"
+          />
         </View>
       ) }
     </View>

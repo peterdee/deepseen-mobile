@@ -1,6 +1,6 @@
 import React from 'react';
+import { Text } from 'react-native';
 
-import { Text } from '../../../components/Themed';
 import { styles } from '../styles';
 
 export const NotConnected = (): JSX.Element => (

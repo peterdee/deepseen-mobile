@@ -5,7 +5,7 @@ import colors from '../../constants/Colors';
 export const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    backgroundColor: 'black',
+    backgroundColor: colors.appBackground,
     flex: 1,
     justifyContent: 'center',
     width: '100%',
@@ -31,28 +31,6 @@ export const styles = StyleSheet.create({
   inputDisabled: {
     backgroundColor: colors.inputBackgroundDisabled,
     borderColor: colors.inputBackgroundDisabled,
-  },
-  button: {
-    alignItems: 'center',
-    backgroundColor: 'black',
-    borderColor: colors.accent,
-    borderRadius: 5,
-    borderWidth: 2,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    padding: 16,
-    width: '80%',
-  },
-  buttonDisabled: {
-    borderColor: colors.accentMuted,
-  },
-  buttonText: {
-    color: colors.accent,
-    fontSize: 16,
-  },
-  buttonTextDisabled: {
-    color: colors.accentMuted,
   },
   errorContainer: {
     height: 20,

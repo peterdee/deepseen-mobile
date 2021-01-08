@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
-import { Pressable } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useDispatch, useSelector } from 'react-redux';
 
+import BigButton from '../../components/BigButton';
 import { clearData } from '../../store/user/actions';
+import colors from '../../constants/Colors';
 import { RootStackParamList } from '../../types';
 import { RootState } from '../../store';
 import { setAuthentication, setToken } from '../../store/auth/actions';
@@ -33,7 +34,11 @@ export const Account = (
     [],
   );
 
-  const handleLogout = () => {
+  /**
+   * Handle signing out
+   * @returns {void}
+   */
+  const handleLogout = (): void => {
     dispatch(clearData());
     dispatch(setAuthentication({ isAuthenticated: false }));
     dispatch(setToken({ token: '' }));
@@ -55,14 +60,12 @@ export const Account = (
       <Text style={styles.email}>
         { user.email }
       </Text>
-      <Pressable
+      <BigButton
+        buttonStyle={{ borderColor: colors.error }}
         onPress={handleLogout}
-        style={styles.button}
-      >
-        <Text style={styles.buttonText}>
-          SIGN OUT
-        </Text>
-      </Pressable>
+        text="SIGN OUT"
+        textStyle={{ color: colors.error }}
+      />
     </View>
   );
-}
+};

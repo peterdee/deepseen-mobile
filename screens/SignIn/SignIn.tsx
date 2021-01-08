@@ -66,7 +66,7 @@ export const SignIn = (
    * @param {string} value - input value
    * @returns {void}
    */
-  const handleInput = (input: string, value: string) => {
+  const handleInput = (input: string, value: string): void => {
     setError('');
     if (input === formInputs.email.name) {
       return setEmail(value);
@@ -81,7 +81,7 @@ export const SignIn = (
    * @returns {Promise<*>}
    */
   const handleSubmit = useCallback(
-    async () => {
+    async (): Promise<void> => {
       // check data
       if (!(email && email.trim() && password && password.trim())) {
         return setError('Please provide your credentials!');
@@ -112,11 +112,19 @@ export const SignIn = (
         return navigation.replace('Root');
       } catch {
         setLoading(false);
+
         // TODO: show a proper message depending on the error
         return setError('Access denied!');
       }
     },
-    [email, error, loading, password, setError, setLoading],
+    [
+      email,
+      error,
+      loading,
+      password,
+      setError,
+      setLoading,
+    ],
   );
 
   return (

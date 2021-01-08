@@ -13,6 +13,7 @@ export default {
   inputBackgroundDisabled: '#121212',
   inputPlaceholder: '#979797',
   tabIconInactive: '#363636',
+  textLight: 'white',
   light: {
     text: '#000',
     background: '#fff',

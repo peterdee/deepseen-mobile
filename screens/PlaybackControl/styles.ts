@@ -89,20 +89,4 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
-  button: {
-    alignItems: 'center',
-    backgroundColor: 'black',
-    borderColor: colors.accent,
-    borderRadius: 5,
-    borderWidth: 2,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    padding: 16,
-    width: '80%',
-  },
-  buttonText: {
-    color: colors.accent,
-    fontSize: 16,
-  },
 });
