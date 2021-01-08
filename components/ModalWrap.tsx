@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  Modal,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { Modal, StyleSheet, View } from 'react-native';
 
 import colors from '../constants/Colors';
 
@@ -19,7 +15,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     opacity: .9,
-  }
+  },
 });
 
 export default (props: ModalWrapProps): JSX.Element => {
@@ -31,8 +27,7 @@ export default (props: ModalWrapProps): JSX.Element => {
       transparent={true}
       visible={visible}
     >
-      <View style={styles.view}
-      >
+      <View style={styles.view}>
         { children }
       </View>
     </Modal>

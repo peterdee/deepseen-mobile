@@ -11,7 +11,8 @@ import formatTime from '../../../utilities/format-time';
 import { styles } from '../styles';
 import { Text, View } from '../../../components/Themed';
 
-import { InfoModal } from './InfoModal';
+import InfoModal from './InfoModal';
+import PlaybackSettings from './PlaybackSettings';
 
 const ICON_SIZE = 32;
 
@@ -20,7 +21,7 @@ const ICON_SIZE = 32;
  * @param {ControlsProps} props - component props
  * @returns {JSX.Element}
  */
-export const Controls = (props: ControlsProps): JSX.Element => {
+export default (props: ControlsProps): JSX.Element => {
   const {
     elapsed,
     handleControls,
@@ -31,7 +32,9 @@ export const Controls = (props: ControlsProps): JSX.Element => {
     infoModalVisible,
     isMuted,
     isPlaying,
+    loop,
     progress,
+    queue,
     setInfoModalVisible,
     shuffle,
     track,
@@ -103,6 +106,11 @@ export const Controls = (props: ControlsProps): JSX.Element => {
           value={isMuted ? 0 : volume}
         />
       </View>
+      <PlaybackSettings
+        loop={loop}
+        queue={queue}
+        shuffle={shuffle}
+      />
       <View style={styles.progress}>
         <View style={styles.progressTimes}>
           <Text style={styles.times}>
@@ -168,4 +176,4 @@ export const Controls = (props: ControlsProps): JSX.Element => {
       </View>
     </View>
   );
-}
+};

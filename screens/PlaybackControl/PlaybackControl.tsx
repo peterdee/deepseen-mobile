@@ -33,8 +33,8 @@ import { RootState } from '../../store';
 import { styles } from './styles';
 import { useRefState } from '../../hooks/useRefState';
 
-import { Controls } from './components/Controls';
-import { NotConnected } from './components/NotConnected';
+import Controls from './components/Controls';
+import NotConnected from './components/NotConnected';
 
 /**
  * Playback Control screen
@@ -449,7 +449,9 @@ export const PlaybackControl = (): JSX.Element => {
             infoModalVisible={infoModalVisible}
             isMuted={isMuted}
             isPlaying={isPlaying}
+            loop={loop}
             progress={progress}
+            queue={queue}
             setInfoModalVisible={setInfoModalVisible}
             shuffle={shuffle}
             track={track.current}

@@ -32,7 +32,9 @@ export interface ControlsProps {
   infoModalVisible: boolean;
   isMuted: boolean;
   isPlaying: boolean;
+  loop: boolean;
   progress: number;
+  queue: number | string;
   setInfoModalVisible: (value: boolean) => void;
   shuffle: boolean;
   track: Track;

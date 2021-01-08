@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export const InfoModal = (props: InfoModalProps): JSX.Element => {
+export default (props: InfoModalProps): JSX.Element => {
   const {
     closeModal,
     infoModalVisible,

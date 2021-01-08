@@ -1,16 +1,12 @@
 import React from 'react';
-import {
-  Pressable,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { Text, TextInput, View } from 'react-native';
 
-import BigButton from '../../../components/BigButton';
 import colors from '../../../constants/Colors';
 import { FormProps } from '../types';
-import Loader from '../../../components/Loader';
 import { styles } from '../styles';
+
+import BigButton from '../../../components/BigButton';
+import Loader from '../../../components/Loader';
 
 export const formInputs = {
   email: {

@@ -3,7 +3,7 @@ import { Text } from 'react-native';
 
 import { styles } from '../styles';
 
-export const NotConnected = (): JSX.Element => (
+export default (): JSX.Element => (
   <Text style={styles.title}>
     Desktop application is not connected!
   </Text>

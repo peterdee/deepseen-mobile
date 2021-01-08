@@ -74,7 +74,7 @@ export const SignIn = (
     if (input === formInputs.password.name) {
       return setPassword(value);
     }
-  }
+  };
 
   /**
    * Handle Sign In form submit
