@@ -43,7 +43,15 @@ import NotConnected from './components/NotConnected';
 export const PlaybackControl = (): JSX.Element => {
   const connection = useContext(IoContext);
 
-  const token = useSelector((state: RootState) => state.auth.token);
+  const showElapsedTime = useSelector<RootState, boolean>(
+    (state: RootState) => state.settings.showElapsedTime,
+  );
+  const showProgressBar = useSelector<RootState, boolean>(
+    (state: RootState) => state.settings.showProgressBar,
+  );
+  const token = useSelector<RootState, string>(
+    (state: RootState) => state.auth.token,
+  );
 
   const [desktopConnected, setDesktopConnected] = useState(false);
   const [disableProgressSlider, setDisableProgressSlider] = useRefState(false);
@@ -453,6 +461,8 @@ export const PlaybackControl = (): JSX.Element => {
             progress={progress}
             queue={queue}
             setInfoModalVisible={setInfoModalVisible}
+            showElapsedTime={showElapsedTime}
+            showProgressBar={showProgressBar}
             shuffle={shuffle}
             track={track.current}
             volume={volume}

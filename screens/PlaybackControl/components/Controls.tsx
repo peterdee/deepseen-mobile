@@ -7,12 +7,12 @@ import colors from '../../../constants/Colors';
 import { ControlsProps } from '../types';
 import Events from '../../../constants/Events';
 import formatName from '../../../utilities/format-track-name';
-import formatTime from '../../../utilities/format-time';
 import { styles } from '../styles';
 import { Text, View } from '../../../components/Themed';
 
 import InfoModal from './InfoModal';
 import PlaybackSettings from './PlaybackSettings';
+import ProgressBar from './ProgressBar';
 
 const ICON_SIZE = 32;
 
@@ -36,6 +36,7 @@ export default (props: ControlsProps): JSX.Element => {
     progress,
     queue,
     setInfoModalVisible,
+    showElapsedTime,
     shuffle,
     track,
     volume,
@@ -48,7 +49,7 @@ export default (props: ControlsProps): JSX.Element => {
   const closeModal = useCallback(
     (): void => setInfoModalVisible(false),
     [setInfoModalVisible],
-  )
+  );
 
   return (
     <View style={styles.trackInfo}>
@@ -78,6 +79,11 @@ export default (props: ControlsProps): JSX.Element => {
           { formatName(track.name, false) }
         </Text>
       </Pressable>
+      <PlaybackSettings
+        loop={loop}
+        queue={queue}
+        shuffle={shuffle}
+      />
       <View style={styles.volumeRow}>
         <Pressable onPress={handleMute}>
           { isMuted && (
@@ -106,32 +112,14 @@ export default (props: ControlsProps): JSX.Element => {
           value={isMuted ? 0 : volume}
         />
       </View>
-      <PlaybackSettings
-        loop={loop}
-        queue={queue}
-        shuffle={shuffle}
+      <ProgressBar
+        elapsed={elapsed}
+        handleProgress={handleProgress}
+        handleProgressSlidingStart={handleProgressSlidingStart}
+        progress={progress}
+        showElapsedTime={showElapsedTime}
+        track={track}
       />
-      <View style={styles.progress}>
-        <View style={styles.progressTimes}>
-          <Text style={styles.times}>
-            { formatTime(elapsed) }
-          </Text>
-          <Text style={styles.times}>
-            { formatTime(track.duration) }
-          </Text>
-        </View>
-        <Slider
-          minimumValue={0}
-          maximumValue={200}
-          minimumTrackTintColor={colors.accent}
-          maximumTrackTintColor="#ffffff"
-          onSlidingStart={handleProgressSlidingStart}
-          onSlidingComplete={handleProgress}
-          step={1}
-          style={styles.progressBar}
-          value={progress}
-        />
-      </View>
       <View style={styles.controls}>
         <Pressable
           disabled={shuffle}

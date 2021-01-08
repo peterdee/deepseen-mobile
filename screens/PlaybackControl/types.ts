@@ -36,6 +36,8 @@ export interface ControlsProps {
   progress: number;
   queue: number | string;
   setInfoModalVisible: (value: boolean) => void;
+  showElapsedTime: boolean;
+  showProgressBar: boolean;
   shuffle: boolean;
   track: Track;
   volume: number;

@@ -5,8 +5,8 @@ import {
 import { SettingsActionTypes, SettingsState } from './types'
 
 const initialState: SettingsState = {
-  showProgressBar: false,
-  showElapsedTime: false,
+  showElapsedTime: true,
+  showProgressBar: true,
 };
 
 export function settingsReducer(
