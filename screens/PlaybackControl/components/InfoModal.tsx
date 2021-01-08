@@ -7,7 +7,6 @@ import ModalWrap from '../../../components/ModalWrap';
 import colors from '../../../constants/Colors';
 import formatDate from '../../../utilities/format-date';
 import formatSize from '../../../utilities/format-size';
-import formatTime from '../../../utilities/format-time';
 import formatTrackName from '../../../utilities/format-track-name';
 import { InfoModalProps } from '../types';
 
@@ -17,6 +16,18 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 32,
     textAlign: 'center',
+    width: '80%',
+  },
+  sectionTitle: {
+    color: colors.textLight,
+    fontSize: 16,
+    fontWeight: 'bold',
+    width: '80%',
+  },
+  sectionText: {
+    color: colors.textLight,
+    fontSize: 16,
+    marginBottom: 16,
     width: '80%',
   },
 });
@@ -33,46 +44,34 @@ export const InfoModal = (props: InfoModalProps): JSX.Element => {
       <Text style={styles.trackTitle}>
         { formatTrackName(track.name) }
       </Text>
-      <Text style={{
-            color: 'white',
-            fontSize: 20,
-            marginBottom: 16,
-            width: '80%',
-          }}
-        >
-          { `Duration: ${formatTime(track.duration)}` }
-        </Text>
-        <Text style={{
-            color: 'white',
-            fontSize: 20,
-            marginBottom: 16,
-            width: '80%',
-          }}
-        >
-          { `Path: ${track.path}` }
-        </Text>
-        <Text style={{
-            color: 'white',
-            fontSize: 20,
-            marginBottom: 16,
-            width: '80%',
-          }}
-        >
-          { `Size: ${formatSize(track.size)}` }
-        </Text>
-        <Text style={{
-            color: 'white',
-            fontSize: 20,
+      <Text style={styles.sectionTitle}>
+        Added:
+      </Text>
+      <Text style={styles.sectionText}>
+        { formatDate(track.added) }
+      </Text>
+      <Text style={styles.sectionTitle}>
+        Size:
+      </Text>
+      <Text style={styles.sectionText}>
+        { formatSize(track.size) }
+      </Text>
+      <Text style={styles.sectionTitle}>
+        Path:
+      </Text>
+      <Text style={[
+          styles.sectionText,
+          {
             marginBottom: 32,
-            width: '80%',
-          }}
-        >
-          { `Added: ${formatDate(track.added)}` }
-        </Text>
-        <BigButton
-          onPress={closeModal}
-          text="CLOSE"
-        />
+          },
+        ]}
+      >
+        { track.path }
+      </Text>
+      <BigButton
+        onPress={closeModal}
+        text="CLOSE"
+      />
     </ModalWrap>
   );
 };
