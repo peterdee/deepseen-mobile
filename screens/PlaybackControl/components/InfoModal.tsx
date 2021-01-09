@@ -32,6 +32,18 @@ const styles = StyleSheet.create({
   },
 });
 
+/**
+ * Get file extension
+ * @param {string} name - track name
+ * @returns {string}
+ */
+const getExtension = (name: string): string => {
+  if (!name) {
+    return 'Not available';
+  }
+  return name.split('.').splice(-1)[0].toUpperCase();
+};
+
 export default (props: InfoModalProps): JSX.Element => {
   const {
     closeModal,
@@ -42,7 +54,13 @@ export default (props: InfoModalProps): JSX.Element => {
   return (
     <ModalWrap visible={infoModalVisible}>
       <Text style={styles.trackTitle}>
-        { formatTrackName(track.name) }
+        { formatTrackName(track.name, false) }
+      </Text>
+      <Text style={styles.sectionTitle}>
+        Format:
+      </Text>
+      <Text style={styles.sectionText}>
+        { getExtension(track.name) }
       </Text>
       <Text style={styles.sectionTitle}>
         Added:
