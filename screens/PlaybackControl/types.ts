@@ -36,6 +36,8 @@ export interface ControlsProps {
   progress: number;
   queue: number | string;
   setInfoModalVisible: (value: boolean) => void;
+  setSettingsModalVisible: (value: boolean) => void;
+  settingsModalVisible: boolean;
   showElapsedTime: boolean;
   showProgressBar: boolean;
   shuffle: boolean;
@@ -58,12 +60,6 @@ export interface DesktopInitData {
   target: string;
   track: Track;
   volume: number;
-};
-
-export interface InfoModalProps {
-  closeModal: () => void;
-  infoModalVisible: boolean;
-  track: Track;
 };
 
 export interface NewClientConnectedData {

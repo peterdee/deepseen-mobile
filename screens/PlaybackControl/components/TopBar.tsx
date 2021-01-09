@@ -6,6 +6,7 @@ import colors from '../../../constants/Colors';
 
 interface TopBarProps {
   setInfoModalVisible: (value: boolean) => void;
+  setSettingsModalVisible: (value: boolean) => void;
 };
 
 const styles = StyleSheet.create({
@@ -26,7 +27,10 @@ const styles = StyleSheet.create({
 const ICON_SIZE = 32;
 
 export default (props: TopBarProps): JSX.Element => {
-  const { setInfoModalVisible } = props;
+  const {
+    setInfoModalVisible,
+    setSettingsModalVisible,
+  } = props;
 
   return (
     <View style={styles.view}>
@@ -37,7 +41,7 @@ export default (props: TopBarProps): JSX.Element => {
           size={ICON_SIZE}
         />
       </Pressable>
-      <Pressable>
+      <Pressable onPress={() => setSettingsModalVisible(true)}>
         <Ionicons
           color={colors.accent}
           name="settings-sharp"

@@ -10,6 +10,7 @@ import InfoModal from './InfoModal';
 import PlaybackControls from './PlaybackControls';
 import PlaybackSettings from './PlaybackSettings';
 import ProgressBar from './ProgressBar';
+import SettingsModal from './SettingsModal';
 import TopBar from './TopBar';
 import VolumeBar from './VolumeBar';
 
@@ -33,6 +34,8 @@ export default (props: ControlsProps): JSX.Element => {
     progress,
     queue,
     setInfoModalVisible,
+    setSettingsModalVisible,
+    settingsModalVisible,
     showElapsedTime,
     showProgressBar,
     shuffle,
@@ -41,22 +44,40 @@ export default (props: ControlsProps): JSX.Element => {
   } = props;
 
   /**
-   * Handle modal closing
+   * Handle Info modal closing
    * @returns {void}
    */
-  const closeModal = useCallback(
+  const closeInfoModal = useCallback(
     (): void => setInfoModalVisible(false),
     [setInfoModalVisible],
+  );
+
+  /**
+   * Handle Settings modal closing
+   * @returns {void}
+   */
+  const closeSettingsModal = useCallback(
+    (): void => setSettingsModalVisible(false),
+    [setSettingsModalVisible],
   );
 
   return (
     <View style={styles.controls}>
       <InfoModal
-        closeModal={closeModal}
+        closeModal={closeInfoModal}
         infoModalVisible={infoModalVisible}
         track={track}
       />
-      <TopBar setInfoModalVisible={setInfoModalVisible} />
+      <SettingsModal
+        closeModal={closeSettingsModal}
+        settingsModalVisible={settingsModalVisible}
+        showElapsedTime={showElapsedTime}
+        showProgressBar={showProgressBar}
+      />
+      <TopBar
+        setInfoModalVisible={setInfoModalVisible}
+        setSettingsModalVisible={setSettingsModalVisible}
+      />
       <Pressable onLongPress={() => setInfoModalVisible(true)}>
         <Text style={styles.title}>
           { formatName(track.name, false) }

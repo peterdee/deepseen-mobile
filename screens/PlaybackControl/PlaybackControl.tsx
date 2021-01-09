@@ -2,7 +2,6 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useRef,
   useState,
 } from 'react';
 import { Socket } from 'socket.io-client';
@@ -53,19 +52,20 @@ export const PlaybackControl = (): JSX.Element => {
     (state: RootState) => state.auth.token,
   );
 
-  const [desktopConnected, setDesktopConnected] = useState(false);
+  const [desktopConnected, setDesktopConnected] = useState<boolean>(false);
   const [disableProgressSlider, setDisableProgressSlider] = useRefState(false);
-  const [elapsed, setElapsed] = useState(0);
-  const [infoModalVisible, setInfoModalVisible] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [loop, setLoop] = useState(false);
-  const [mobileConnected, setMobileConnected] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [queue, setQueue] = useState(0);
-  const [shuffle, setShuffle] = useState(false);
+  const [elapsed, setElapsed] = useState<number>(0);
+  const [infoModalVisible, setInfoModalVisible] = useState<boolean>(false);
+  const [isMuted, setIsMuted] = useState<boolean>(false);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [loop, setLoop] = useState<boolean>(false);
+  const [mobileConnected, setMobileConnected] = useState<boolean>(false);
+  const [progress, setProgress] = useState<number>(0);
+  const [queue, setQueue] = useState<number>(0);
+  const [settingsModalVisible, setSettingsModalVisible] = useState<boolean>(false);
+  const [shuffle, setShuffle] = useState<boolean>(false);
   const [track, setTrack] = useRefState({} as Track);
-  const [volume, setVolume] = useState(0);
+  const [volume, setVolume] = useState<number>(0);
 
   // handle incoming CLEAR_QUEUE event
   const clearQueue = useCallback(
@@ -461,6 +461,8 @@ export const PlaybackControl = (): JSX.Element => {
             progress={progress}
             queue={queue}
             setInfoModalVisible={setInfoModalVisible}
+            setSettingsModalVisible={setSettingsModalVisible}
+            settingsModalVisible={settingsModalVisible}
             showElapsedTime={showElapsedTime}
             showProgressBar={showProgressBar}
             shuffle={shuffle}

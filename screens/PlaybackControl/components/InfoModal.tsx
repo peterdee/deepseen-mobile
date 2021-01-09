@@ -8,7 +8,13 @@ import colors from '../../../constants/Colors';
 import formatDate from '../../../utilities/format-date';
 import formatSize from '../../../utilities/format-size';
 import formatTrackName from '../../../utilities/format-track-name';
-import { InfoModalProps } from '../types';
+import { Track } from '../types';
+
+interface InfoModalProps {
+  closeModal: () => void;
+  infoModalVisible: boolean;
+  track: Track;
+};
 
 const styles = StyleSheet.create({
   trackTitle: {
