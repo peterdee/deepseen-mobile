@@ -1,18 +1,19 @@
 import React, { useCallback } from 'react';
-import { FontAwesome5, Ionicons } from '@expo/vector-icons'; 
+import { FontAwesome5 } from '@expo/vector-icons'; 
 import { Pressable } from 'react-native';
 import Slider from '@react-native-community/slider';
 
 import colors from '../../../constants/Colors';
 import { ControlsProps } from '../types';
-import Events from '../../../constants/Events';
 import formatName from '../../../utilities/format-track-name';
 import { styles } from '../styles';
 import { Text, View } from '../../../components/Themed';
 
 import InfoModal from './InfoModal';
+import PlaybackControls from './PlaybackControls';
 import PlaybackSettings from './PlaybackSettings';
 import ProgressBar from './ProgressBar';
+import TopBar from './TopBar';
 
 const ICON_SIZE = 32;
 
@@ -37,6 +38,7 @@ export default (props: ControlsProps): JSX.Element => {
     queue,
     setInfoModalVisible,
     showElapsedTime,
+    showProgressBar,
     shuffle,
     track,
     volume,
@@ -58,22 +60,7 @@ export default (props: ControlsProps): JSX.Element => {
         infoModalVisible={infoModalVisible}
         track={track}
       />
-      <View style={styles.topBar}>
-        <Pressable onPress={() => setInfoModalVisible(true)}>
-          <FontAwesome5
-            color={colors.accent}
-            name="info-circle"
-            size={ICON_SIZE}
-          />
-        </Pressable>
-        <Pressable>
-          <Ionicons
-            color={colors.accent}
-            name="settings-sharp"
-            size={ICON_SIZE}
-          />
-        </Pressable>
-      </View>
+      <TopBar setInfoModalVisible={setInfoModalVisible} />
       <Pressable onLongPress={() => setInfoModalVisible(true)}>
         <Text style={styles.title}>
           { formatName(track.name, false) }
@@ -120,48 +107,11 @@ export default (props: ControlsProps): JSX.Element => {
         showElapsedTime={showElapsedTime}
         track={track}
       />
-      <View style={styles.controls}>
-        <Pressable
-          disabled={shuffle}
-          onPress={() => handleControls(Events.PLAY_PREVIOUS)}
-        >
-          <FontAwesome5
-            color={shuffle ? colors.tabIconInactive : colors.accent}
-            name="backward"
-            size={ICON_SIZE}
-          />
-        </Pressable>
-        <Pressable onPress={() => handleControls(Events.STOP_PLAYBACK)}>
-          <FontAwesome5
-            color={colors.accent}
-            name="stop"
-            size={ICON_SIZE}
-          />
-        </Pressable>
-        <Pressable onPress={() => handleControls(Events.PLAY_PAUSE)}>
-          { isPlaying && (
-            <FontAwesome5
-              color={colors.accent}
-              name="pause"
-              size={ICON_SIZE}
-            />
-          ) }
-          { !isPlaying && (
-            <FontAwesome5
-              color={colors.accent}
-              name="play"
-              size={ICON_SIZE}
-            />
-          ) }  
-        </Pressable>
-        <Pressable onPress={() => handleControls(Events.PLAY_NEXT)}>
-          <FontAwesome5
-            color={colors.accent}
-            name="forward"
-            size={ICON_SIZE}
-          />
-        </Pressable>
-      </View>
+      <PlaybackControls
+        handleControls={handleControls}
+        isPlaying={isPlaying}
+        shuffle={shuffle}
+      />
     </View>
   );
 };

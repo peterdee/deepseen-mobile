@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
-  }
+  },
 });
 
 const ICON_SIZE = 20;
