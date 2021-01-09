@@ -1,9 +1,6 @@
 import React, { useCallback } from 'react';
-import { FontAwesome5 } from '@expo/vector-icons'; 
 import { Pressable } from 'react-native';
-import Slider from '@react-native-community/slider';
 
-import colors from '../../../constants/Colors';
 import { ControlsProps } from '../types';
 import formatName from '../../../utilities/format-track-name';
 import { styles } from '../styles';
@@ -14,8 +11,7 @@ import PlaybackControls from './PlaybackControls';
 import PlaybackSettings from './PlaybackSettings';
 import ProgressBar from './ProgressBar';
 import TopBar from './TopBar';
-
-const ICON_SIZE = 32;
+import VolumeBar from './VolumeBar';
 
 /**
  * Display playback controls
@@ -71,34 +67,12 @@ export default (props: ControlsProps): JSX.Element => {
         queue={queue}
         shuffle={shuffle}
       />
-      <View style={styles.volumeRow}>
-        <Pressable onPress={handleMute}>
-          { isMuted && (
-            <FontAwesome5
-              color={colors.accent}
-              name="volume-mute"
-              size={ICON_SIZE}
-            />
-          ) }
-          { !isMuted && (
-            <FontAwesome5
-              color={colors.accent}
-              name="volume-up"
-              size={ICON_SIZE}
-            />
-          ) }
-        </Pressable>
-        <Slider
-          minimumValue={0}
-          maximumValue={100}
-          minimumTrackTintColor={colors.accent}
-          maximumTrackTintColor="#ffffff"
-          onSlidingComplete={handleVolume}
-          step={1}
-          style={{width: 200, height: 40}}
-          value={isMuted ? 0 : volume}
-        />
-      </View>
+      <VolumeBar
+        handleMute={handleMute}
+        handleVolume={handleVolume}
+        isMuted={isMuted}
+        volume={volume}
+      />
       <ProgressBar
         elapsed={elapsed}
         handleProgress={handleProgress}

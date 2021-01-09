@@ -30,11 +30,4 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     width: '80%',
   },
-  volumeRow: {
-    alignItems: 'center',
-    backgroundColor: colors.appBackground,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
 });
