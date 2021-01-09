@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     marginLeft: 'auto',
     marginRight: 'auto',
-    marginTop: 32,
     width: '80%',
   },
   progressTimes: {
@@ -35,7 +34,8 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   progressBar: {
-    height: 40,
+    height: 48,
+    marginBottom: 48,
     marginLeft: 0,
     marginRight: 0,
     width: '100%',

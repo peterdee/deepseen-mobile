@@ -21,7 +21,6 @@ const styles = StyleSheet.create({
     marginBottom: 48,
     marginLeft: 'auto',
     marginRight: 'auto',
-    marginTop: 32,
     width: '80%',
   },
 });

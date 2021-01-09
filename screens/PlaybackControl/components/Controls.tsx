@@ -50,7 +50,7 @@ export default (props: ControlsProps): JSX.Element => {
   );
 
   return (
-    <View style={styles.trackInfo}>
+    <View style={styles.controls}>
       <InfoModal
         closeModal={closeModal}
         infoModalVisible={infoModalVisible}
@@ -62,30 +62,32 @@ export default (props: ControlsProps): JSX.Element => {
           { formatName(track.name, false) }
         </Text>
       </Pressable>
-      <PlaybackSettings
-        loop={loop}
-        queue={queue}
-        shuffle={shuffle}
-      />
-      <VolumeBar
-        handleMute={handleMute}
-        handleVolume={handleVolume}
-        isMuted={isMuted}
-        volume={volume}
-      />
-      <ProgressBar
-        elapsed={elapsed}
-        handleProgress={handleProgress}
-        handleProgressSlidingStart={handleProgressSlidingStart}
-        progress={progress}
-        showElapsedTime={showElapsedTime}
-        track={track}
-      />
-      <PlaybackControls
-        handleControls={handleControls}
-        isPlaying={isPlaying}
-        shuffle={shuffle}
-      />
+      <View style={styles.bottomWrap}>
+        <PlaybackSettings
+          loop={loop}
+          queue={queue}
+          shuffle={shuffle}
+        />
+        <VolumeBar
+          handleMute={handleMute}
+          handleVolume={handleVolume}
+          isMuted={isMuted}
+          volume={volume}
+        />
+        <ProgressBar
+          elapsed={elapsed}
+          handleProgress={handleProgress}
+          handleProgressSlidingStart={handleProgressSlidingStart}
+          progress={progress}
+          showElapsedTime={showElapsedTime}
+          track={track}
+        />
+        <PlaybackControls
+          handleControls={handleControls}
+          isPlaying={isPlaying}
+          shuffle={shuffle}
+        />
+      </View>
     </View>
   );
 };

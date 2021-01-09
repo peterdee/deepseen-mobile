@@ -26,12 +26,13 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: 48,
     marginLeft: 'auto',
     marginRight: 'auto',
     width: '80%',
   },
   slider: {
-    height: 40,
+    height: 48,
     width: 200,
   },
 });

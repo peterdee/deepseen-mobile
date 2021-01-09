@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-around',
     width: '100%',
   },
-  trackInfo: {
+  controls: {
     backgroundColor: colors.appBackground,
     display: 'flex',
     flexDirection: 'column',
@@ -20,14 +20,19 @@ export const styles = StyleSheet.create({
     width: '100%',
   },
   title: {
-    color: 'white',
+    color: colors.textLight,
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 48,
-    marginTop: 48,
     marginLeft: 'auto',
     marginRight: 'auto',
     textAlign: 'center',
     width: '80%',
+  },
+  bottomWrap: {
+    backgroundColor: colors.appBackground,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    width: '100%',
   },
 });
