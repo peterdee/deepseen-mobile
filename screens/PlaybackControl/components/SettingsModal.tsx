@@ -1,13 +1,14 @@
 import React from 'react';
 import {
+  Pressable,
   StyleSheet,
-  Switch,
   Text,
   View,
 } from 'react-native';
 
 import BigButton from '../../../components/BigButton';
 import ModalWrap from '../../../components/ModalWrap';
+import Switcher from '../../../components/Switcher';
 
 import colors from '../../../constants/Colors';
 
@@ -16,7 +17,9 @@ interface SettingsModalProps {
   settingsModalVisible: boolean;
   showElapsedTime: boolean;
   showProgressBar: boolean;
-}
+  switchElapsedTime: () => void;
+  switchProgressBar: () => void;
+};
 
 const styles = StyleSheet.create({
   title: {
@@ -31,8 +34,11 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    marginBottom: 16,
+    marginBottom: 24,
     width: '80%',
+  },
+  rowPressable: {
+    marginLeft: 16,
   },
   rowText: {
     color: colors.textLight,
@@ -46,6 +52,8 @@ export default (props: SettingsModalProps): JSX.Element => {
     settingsModalVisible,
     showElapsedTime,
     showProgressBar,
+    switchElapsedTime,
+    switchProgressBar,
   } = props;
 
   return (
@@ -54,28 +62,34 @@ export default (props: SettingsModalProps): JSX.Element => {
         Settings
       </Text>
       <View style={styles.row}>
-        <Switch
-          trackColor={{ false: '#767577', true: '#81b0ff' }}
-          thumbColor={true ? '#f5dd4b' : '#f4f3f4'}
-          ios_backgroundColor="#3e3e3e"
-          onValueChange={() => null}
+        <Switcher
+          onChange={switchProgressBar}
           value={showProgressBar}
         />
-        <Text style={styles.rowText}>
-          { `${showProgressBar ? 'Hide' : 'Show'} progress bar` }
-        </Text>
+        <Pressable
+          onPress={switchProgressBar}
+          style={styles.rowPressable}
+        >
+          <Text style={styles.rowText}>
+            { `${showProgressBar ? 'Hide' : 'Show'} progress bar` }
+          </Text>
+        </Pressable>
       </View>
       <View style={styles.row}>
-        <Switch
-          trackColor={{ false: '#767577', true: '#81b0ff' }}
-          thumbColor={true ? '#f5dd4b' : '#f4f3f4'}
-          ios_backgroundColor="#3e3e3e"
-          onValueChange={() => null}
+        <Switcher
+          disabled={!showProgressBar}
+          onChange={switchElapsedTime}
           value={showElapsedTime}
         />
-        <Text style={styles.rowText}>
-          { `${showElapsedTime ? 'Hide' : 'Show'} elapsed time` }
-        </Text>
+        <Pressable
+          disabled={!showProgressBar}
+          onPress={switchElapsedTime}
+          style={styles.rowPressable}
+        >
+          <Text style={styles.rowText}>
+            { `${showElapsedTime ? 'Hide' : 'Show'} elapsed time` }
+          </Text>
+        </Pressable>
       </View>
       <BigButton
         onPress={closeModal}

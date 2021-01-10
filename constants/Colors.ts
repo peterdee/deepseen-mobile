@@ -12,6 +12,9 @@ export default {
   inputBackground: '#343434',
   inputBackgroundDisabled: '#121212',
   inputPlaceholder: '#979797',
+  switcherThumb: 'white',
+  switcherThumbDisabled: '#d9d9d9',
+  switcherTrack: '#eaeaea',
   tabIconInactive: '#363636',
   textLight: 'white',
   light: {

@@ -61,6 +61,10 @@ export default (props: ControlsProps): JSX.Element => {
     [setSettingsModalVisible],
   );
 
+  // TODO: move this up and pass as props
+  const switchElapsedTime = () => console.log('elapsed');
+  const switchProgressBar = () => console.log('progress');
+
   return (
     <View style={styles.controls}>
       <InfoModal
@@ -73,6 +77,8 @@ export default (props: ControlsProps): JSX.Element => {
         settingsModalVisible={settingsModalVisible}
         showElapsedTime={showElapsedTime}
         showProgressBar={showProgressBar}
+        switchElapsedTime={switchElapsedTime}
+        switchProgressBar={switchProgressBar}
       />
       <TopBar
         setInfoModalVisible={setInfoModalVisible}
