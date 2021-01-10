@@ -41,6 +41,8 @@ export interface ControlsProps {
   showElapsedTime: boolean;
   showProgressBar: boolean;
   shuffle: boolean;
+  switchElapsedTime: () => void;
+  switchProgressBar: () => void;
   track: Track;
   volume: number;
 };

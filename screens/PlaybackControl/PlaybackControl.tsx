@@ -5,7 +5,8 @@ import React, {
   useState,
 } from 'react';
 import { Socket } from 'socket.io-client';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { View } from 'react-native';
 
 import { CLIENT_TYPE, CLIENT_TYPES } from '../../constants/Values';
 import {
@@ -27,9 +28,12 @@ import {
 } from './types';
 import Events from '../../constants/Events';
 import IoContext from '../../contexts/socket-io';
-import { View } from '../../components/Themed';
 import { RootState } from '../../store';
 import { styles } from './styles';
+import {
+  switchElapsedTime,
+  switchProgressBar,
+} from '../../store/settings/actions';
 import { useRefState } from '../../hooks/useRefState';
 
 import Controls from './components/Controls';
@@ -41,6 +45,7 @@ import NotConnected from './components/NotConnected';
  */
 export const PlaybackControl = (): JSX.Element => {
   const connection = useContext(IoContext);
+  const dispatch = useDispatch();
 
   const showElapsedTime = useSelector<RootState, boolean>(
     (state: RootState) => state.settings.showElapsedTime,
@@ -443,6 +448,28 @@ export const PlaybackControl = (): JSX.Element => {
     [disableProgressSlider, setDisableProgressSlider],
   );
 
+  /**
+   * Hanlde the elapsed time switch
+   * @returns {void}
+   */
+  const hanldeElapsedTimeSwitch = useCallback(
+    () => dispatch(switchElapsedTime({ showElapsedTime: !showElapsedTime })),
+    [dispatch, showElapsedTime],
+  );
+
+  /**
+   * Hanlde the progress bar switch
+   * @returns {void}
+   */
+  const hanldeProgressBarSwitch = useCallback(
+    () => {
+      dispatch(switchProgressBar({ showProgressBar: !showProgressBar }));
+
+      // TODO: subscribe & unsubscribe from the UPDATE_PROGRESS event
+    },
+    [dispatch, showProgressBar],
+  );
+
   return (
     <View style={styles.container}>
       { desktopConnected && mobileConnected
@@ -466,6 +493,8 @@ export const PlaybackControl = (): JSX.Element => {
             showElapsedTime={showElapsedTime}
             showProgressBar={showProgressBar}
             shuffle={shuffle}
+            switchElapsedTime={hanldeElapsedTimeSwitch}
+            switchProgressBar={hanldeProgressBarSwitch}
             track={track.current}
             volume={volume}
           />

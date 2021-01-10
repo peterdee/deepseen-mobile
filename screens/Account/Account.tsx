@@ -1,16 +1,17 @@
 import React, { useEffect } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
+import { Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
-import BigButton from '../../components/BigButton';
 import { clearData } from '../../store/user/actions';
 import colors from '../../constants/Colors';
 import { RootStackParamList } from '../../types';
 import { RootState } from '../../store';
 import { setAuthentication, setToken } from '../../store/auth/actions';
 import { styles } from './styles';
-import { Text, View } from '../../components/Themed';
 import { UserState } from '../../store/user/types';
+
+import BigButton from '../../components/BigButton';
 
 export const Account = (
   { navigation }: StackScreenProps<RootStackParamList, 'Root'>,

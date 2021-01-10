@@ -58,16 +58,22 @@ export default (props: ProgressBarProps): JSX.Element => {
 
   return (
     <View style={styles.progress}>
-      { !showElapsedTime && (
-        <View style={styles.progressTimes}>
+      <View style={[
+          styles.progressTimes,
+          !showElapsedTime && {
+            justifyContent: 'center',
+          },
+        ]}
+      >
+        { showElapsedTime && (
           <Text style={styles.times}>
             { formatTime(elapsed) }
           </Text>
-          <Text style={styles.times}>
-            { formatTime(track.duration) }
-          </Text>
-        </View>
-      ) }
+        ) }
+        <Text style={styles.times}>
+          { formatTime(track.duration) }
+        </Text>
+      </View>
       <Slider
         minimumValue={0}
         maximumValue={200}

@@ -39,6 +39,8 @@ export default (props: ControlsProps): JSX.Element => {
     showElapsedTime,
     showProgressBar,
     shuffle,
+    switchElapsedTime,
+    switchProgressBar,
     track,
     volume,
   } = props;
@@ -60,10 +62,6 @@ export default (props: ControlsProps): JSX.Element => {
     (): void => setSettingsModalVisible(false),
     [setSettingsModalVisible],
   );
-
-  // TODO: move this up and pass as props
-  const switchElapsedTime = () => console.log('elapsed');
-  const switchProgressBar = () => console.log('progress');
 
   return (
     <View style={styles.controls}>
@@ -101,14 +99,16 @@ export default (props: ControlsProps): JSX.Element => {
           isMuted={isMuted}
           volume={volume}
         />
-        <ProgressBar
-          elapsed={elapsed}
-          handleProgress={handleProgress}
-          handleProgressSlidingStart={handleProgressSlidingStart}
-          progress={progress}
-          showElapsedTime={showElapsedTime}
-          track={track}
-        />
+        { showProgressBar && (
+          <ProgressBar
+            elapsed={elapsed}
+            handleProgress={handleProgress}
+            handleProgressSlidingStart={handleProgressSlidingStart}
+            progress={progress}
+            showElapsedTime={showElapsedTime}
+            track={track}
+          />
+        ) }
         <PlaybackControls
           handleControls={handleControls}
           isPlaying={isPlaying}
