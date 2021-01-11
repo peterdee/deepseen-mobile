@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginBottom: 48,
+    marginBottom: 32,
   },
 });
 

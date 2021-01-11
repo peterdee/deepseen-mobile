@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   },
   progressBar: {
     height: 48,
-    marginBottom: 48,
+    marginBottom: 32,
     marginLeft: 0,
     marginRight: 0,
     width: '100%',
@@ -83,7 +83,7 @@ export default (props: ProgressBarProps): JSX.Element => {
         onSlidingComplete={handleProgress}
         step={1}
         style={styles.progressBar}
-        value={progress}
+        value={Number(progress)}
       />
     </View>
   );
