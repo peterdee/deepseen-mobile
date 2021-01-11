@@ -14,9 +14,12 @@ import colors from '../../../constants/Colors';
 
 interface SettingsModalProps {
   closeModal: () => void;
+  loop: boolean;
+  queue: number | string;
   settingsModalVisible: boolean;
   showElapsedTime: boolean;
   showProgressBar: boolean;
+  shuffle: boolean;
   switchElapsedTime: () => void;
   switchProgressBar: () => void;
 };
@@ -44,14 +47,23 @@ const styles = StyleSheet.create({
     color: colors.textLight,
     fontSize: 16,
   },
+  separator: {
+    backgroundColor: colors.textLight,
+    height: 1,
+    marginBottom: 24,
+    width: '80%',
+  },
 });
 
 export default (props: SettingsModalProps): JSX.Element => {
   const {
     closeModal,
+    loop,
+    queue,
     settingsModalVisible,
     showElapsedTime,
     showProgressBar,
+    shuffle,
     switchElapsedTime,
     switchProgressBar,
   } = props;
@@ -71,7 +83,7 @@ export default (props: SettingsModalProps): JSX.Element => {
           style={styles.rowPressable}
         >
           <Text style={styles.rowText}>
-            { `${showProgressBar ? 'Hide' : 'Show'} progress bar` }
+            Progress bar
           </Text>
         </Pressable>
       </View>
@@ -87,9 +99,43 @@ export default (props: SettingsModalProps): JSX.Element => {
           style={styles.rowPressable}
         >
           <Text style={styles.rowText}>
-            { `${showElapsedTime ? 'Hide' : 'Show'} elapsed time` }
+            Elapsed time
           </Text>
         </Pressable>
+      </View>
+      <View style={styles.separator} />
+      <View style={styles.row}>
+        <Switcher
+          onChange={() => null}
+          value={loop}
+        />
+        <Pressable
+          onPress={() => null}
+          style={styles.rowPressable}
+        >
+          <Text style={styles.rowText}>
+            Loop playlist
+          </Text>
+        </Pressable>
+      </View>
+      <View style={styles.row}>
+        <Switcher
+          onChange={() => null}
+          value={shuffle}
+        />
+        <Pressable
+          onPress={() => null}
+          style={styles.rowPressable}
+        >
+          <Text style={styles.rowText}>
+            Shuffle playlist
+          </Text>
+        </Pressable>
+      </View>
+      <View style={styles.row}>
+        <Text style={styles.rowText}>
+          { `Queued tracks: ${queue}` }
+        </Text>
       </View>
       <BigButton
         onPress={closeModal}

@@ -463,11 +463,19 @@ export const PlaybackControl = (): JSX.Element => {
    */
   const hanldeProgressBarSwitch = useCallback(
     () => {
-      dispatch(switchProgressBar({ showProgressBar: !showProgressBar }));
+      const originalValue = showProgressBar;
+      dispatch(switchProgressBar({ showProgressBar: !originalValue }));
 
-      // TODO: subscribe & unsubscribe from the UPDATE_PROGRESS event
+      if (connection.connected) {
+        // prevent multi-subscriptions for the same event
+        connection.off(Events.UPDATE_PROGRESS, updateProgress);
+
+        if (!originalValue) {
+          connection.on(Events.UPDATE_PROGRESS, updateProgress);
+        }
+      }
     },
-    [dispatch, showProgressBar],
+    [connection, dispatch, showProgressBar],
   );
 
   return (

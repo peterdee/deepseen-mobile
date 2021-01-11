@@ -72,9 +72,12 @@ export default (props: ControlsProps): JSX.Element => {
       />
       <SettingsModal
         closeModal={closeSettingsModal}
+        loop={loop}
+        queue={queue}
         settingsModalVisible={settingsModalVisible}
         showElapsedTime={showElapsedTime}
         showProgressBar={showProgressBar}
+        shuffle={shuffle}
         switchElapsedTime={switchElapsedTime}
         switchProgressBar={switchProgressBar}
       />
