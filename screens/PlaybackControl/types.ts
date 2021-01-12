@@ -24,10 +24,13 @@ export interface Track {
 
 export interface ControlsProps {
   elapsed: number;
+  handleClearQueue: () => boolean | typeof Socket;
   handleControls: (value: string) => boolean | typeof Socket;
   handleMute: () => boolean | void;
   handleProgress: (value: number | string) => boolean | typeof Socket;
   handleProgressSlidingStart: () => void;
+  handleSwitchLoop: () => void;
+  handleSwitchShuffle: () => void;
   handleVolume: (value: number | string) => boolean | typeof Socket;
   infoModalVisible: boolean;
   isMuted: boolean;

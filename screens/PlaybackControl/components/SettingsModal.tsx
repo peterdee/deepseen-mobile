@@ -13,6 +13,7 @@ import Switcher from '../../../components/Switcher';
 import colors from '../../../constants/Colors';
 
 interface SettingsModalProps {
+  clearQueue: () => void;
   closeModal: () => void;
   loop: boolean;
   queue: number | string;
@@ -21,7 +22,9 @@ interface SettingsModalProps {
   showProgressBar: boolean;
   shuffle: boolean;
   switchElapsedTime: () => void;
+  switchLoop: () => void;
   switchProgressBar: () => void;
+  switchShuffle: () => void;
 };
 
 const styles = StyleSheet.create({
@@ -53,10 +56,14 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     width: '80%',
   },
+  clearButton: {
+    marginBottom: 24,
+  },
 });
 
 export default (props: SettingsModalProps): JSX.Element => {
   const {
+    clearQueue,
     closeModal,
     loop,
     queue,
@@ -65,7 +72,9 @@ export default (props: SettingsModalProps): JSX.Element => {
     showProgressBar,
     shuffle,
     switchElapsedTime,
+    switchLoop,
     switchProgressBar,
+    switchShuffle,
   } = props;
 
   return (
@@ -106,11 +115,11 @@ export default (props: SettingsModalProps): JSX.Element => {
       <View style={styles.separator} />
       <View style={styles.row}>
         <Switcher
-          onChange={() => null}
+          onChange={switchLoop}
           value={loop}
         />
         <Pressable
-          onPress={() => null}
+          onPress={switchLoop}
           style={styles.rowPressable}
         >
           <Text style={styles.rowText}>
@@ -120,11 +129,11 @@ export default (props: SettingsModalProps): JSX.Element => {
       </View>
       <View style={styles.row}>
         <Switcher
-          onChange={() => null}
+          onChange={switchShuffle}
           value={shuffle}
         />
         <Pressable
-          onPress={() => null}
+          onPress={switchShuffle}
           style={styles.rowPressable}
         >
           <Text style={styles.rowText}>
@@ -132,11 +141,18 @@ export default (props: SettingsModalProps): JSX.Element => {
           </Text>
         </Pressable>
       </View>
+      <View style={styles.separator} />
       <View style={styles.row}>
         <Text style={styles.rowText}>
           { `Queued tracks: ${queue}` }
         </Text>
       </View>
+      <BigButton
+        buttonStyle={styles.clearButton}
+        disabled={queue === 0}
+        onPress={clearQueue}
+        text="CLEAR QUEUE"
+      />
       <BigButton
         onPress={closeModal}
         text="CLOSE"

@@ -22,10 +22,13 @@ import VolumeBar from './VolumeBar';
 export default (props: ControlsProps): JSX.Element => {
   const {
     elapsed,
+    handleClearQueue,
     handleControls,
     handleMute,
     handleProgressSlidingStart,
     handleProgress,
+    handleSwitchLoop,
+    handleSwitchShuffle,
     handleVolume,
     infoModalVisible,
     isMuted,
@@ -71,6 +74,7 @@ export default (props: ControlsProps): JSX.Element => {
         track={track}
       />
       <SettingsModal
+        clearQueue={handleClearQueue}
         closeModal={closeSettingsModal}
         loop={loop}
         queue={queue}
@@ -79,7 +83,9 @@ export default (props: ControlsProps): JSX.Element => {
         showProgressBar={showProgressBar}
         shuffle={shuffle}
         switchElapsedTime={switchElapsedTime}
+        switchLoop={handleSwitchLoop}
         switchProgressBar={switchProgressBar}
+        switchShuffle={handleSwitchShuffle}
       />
       <TopBar
         setInfoModalVisible={setInfoModalVisible}

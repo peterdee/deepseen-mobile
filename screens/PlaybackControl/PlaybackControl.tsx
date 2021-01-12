@@ -353,6 +353,21 @@ export const PlaybackControl = (): JSX.Element => {
   }, []);
 
   /**
+   * Handle the clear queue button click
+   * @returns {boolean|SocketIOClient.Socket}
+   */
+  const handleClearQueue = useCallback(
+    (): boolean | typeof Socket => {
+      if (!connection.connected) {
+        return false;
+      }
+      setQueue(0);
+      return connection.emit(Events.CLEAR_QUEUE);
+    },
+    [setQueue],
+  );
+
+  /**
    * Handle playback controls
    * @param {string} event - Websockets event
    * @returns {boolean|SocketIOClient.Socket}
@@ -478,16 +493,63 @@ export const PlaybackControl = (): JSX.Element => {
     [connection, dispatch, showProgressBar],
   );
 
+  /**
+   * Handle the playlist loop switch
+   * @returns {boolean|void}
+   */
+  const handleSwitchLoop = useCallback(
+    (): boolean | void => {
+      if (!connection.connected) {
+        return false;
+      }
+      return setLoop((value) => {
+        connection.emit(
+          Events.UPDATE_LOOP,
+          {
+            loop: !value,
+          },
+        );
+        return !value;
+      });
+    },
+    [setLoop],
+  );
+
+  /**
+   * Handle the playlist shuffle switch
+   * @returns {boolean|void}
+   */
+  const handleSwitchShuffle = useCallback(
+    (): boolean | void => {
+      if (!connection.connected) {
+        return false;
+      }
+      return setShuffle((value) => {
+        connection.emit(
+          Events.UPDATE_SHUFFLE,
+          {
+            shuffle: !value,
+          },
+        );
+        return !value;
+      });
+    },
+    [setShuffle],
+  );
+
   return (
     <View style={styles.container}>
       { desktopConnected && mobileConnected
         ? (
           <Controls
             elapsed={elapsed}
+            handleClearQueue={handleClearQueue}
             handleControls={handleControls}
             handleMute={handleMute}
             handleProgress={handleProgress}
             handleProgressSlidingStart={handleProgressSlidingStart}
+            handleSwitchLoop={handleSwitchLoop}
+            handleSwitchShuffle={handleSwitchShuffle}
             handleVolume={handleVolume}
             infoModalVisible={infoModalVisible}
             isMuted={isMuted}
