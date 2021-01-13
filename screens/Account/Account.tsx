@@ -58,9 +58,6 @@ export const Account = (
           { user.firstName } { user.lastName }
         </Text>
       </View>
-      <Text style={styles.email}>
-        { user.email }
-      </Text>
       <BigButton
         buttonStyle={{ borderColor: colors.error }}
         onPress={handleLogout}

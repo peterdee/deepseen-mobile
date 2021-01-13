@@ -5,14 +5,14 @@ import colors from '../../constants/Colors';
 export const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    backgroundColor: 'black',
+    backgroundColor: colors.appBackground,
     flex: 1,
     justifyContent: 'center',
     width: '100%',
   },
   userData: {
     alignItems: 'center',
-    backgroundColor: 'black',
+    backgroundColor: colors.appBackground,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
@@ -22,7 +22,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.accent,
     borderRadius: 50,
-    color: 'black',
+    color: colors.textDark,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
@@ -30,35 +30,13 @@ export const styles = StyleSheet.create({
     width: 64,
   },
   initialsText: {
-    color: 'black',
+    color: colors.textDark,
     fontSize: 24,
     fontWeight: 'bold',
   },
   userName: {
-    color: 'white',
+    color: colors.textLight,
     fontSize: 20,
     marginLeft: 16,
-  },
-  email: {
-    color: 'white',
-    fontSize: 16,
-    marginBottom: 48,
-  },
-  button: {
-    alignItems: 'center',
-    backgroundColor: colors.appBackground,
-    borderColor: colors.error,
-    borderRadius: 5,
-    borderWidth: 2,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    padding: 16,
-    width: '80%',
-  },
-  buttonText: {
-    color: colors.error,
-    fontSize: 16,
-    textAlign: 'center',
   },
 });

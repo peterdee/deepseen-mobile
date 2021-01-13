@@ -16,6 +16,7 @@ export default {
   switcherThumbDisabled: '#d9d9d9',
   switcherTrack: '#eaeaea',
   tabIconInactive: '#363636',
+  textDark: 'black',
   textLight: 'white',
   light: {
     text: '#000',
