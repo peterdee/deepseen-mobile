@@ -57,6 +57,7 @@ export const PlaybackControl = (): JSX.Element => {
     (state: RootState) => state.auth.token,
   );
 
+  const [alreadyOnline, setAlreadyOnline] = useState<boolean>(false);
   const [desktopConnected, setDesktopConnected] = useState<boolean>(false);
   const [disableProgressSlider, setDisableProgressSlider] = useRefState(false);
   const [elapsed, setElapsed] = useState<number>(0);
@@ -81,6 +82,23 @@ export const PlaybackControl = (): JSX.Element => {
       }
     },
     [setQueue],
+  );
+
+  // handle the CLIENT_TYPE_IS_ALREADY_ONLINE event
+  const clientTypeIsAlreadyOnline = useCallback(
+    (): typeof Socket => {
+      setAlreadyOnline(true);
+      setDesktopConnected(false);
+      setMobileConnected(false);
+
+      // close the connection
+      return connection.close();
+    },
+    [
+      setAlreadyOnline,
+      setDesktopConnected,
+      setMobileConnected,
+    ],
   );
 
   // handle incoming connect event
@@ -313,6 +331,7 @@ export const PlaybackControl = (): JSX.Element => {
     // add event listeners for the incoming events
     connection.on(Events.CLEAR_QUEUE, clearQueue);
     connection.on(Events.CLIENT_DISCONNECTED, clientDisconnected);
+    connection.on(Events.CLIENT_TYPE_IS_ALREADY_ONLINE, clientTypeIsAlreadyOnline);
     connection.on(Events.CONNECT, connect);
     connection.on(Events.CONNECT_ERROR, connectError);
     connection.on(Events.DESKTOP_INIT, desktopInit);
@@ -332,6 +351,7 @@ export const PlaybackControl = (): JSX.Element => {
     return () => {
       connection.off(Events.CLEAR_QUEUE, clearQueue);
       connection.off(Events.CLIENT_DISCONNECTED, clientDisconnected);
+      connection.off(Events.CLIENT_TYPE_IS_ALREADY_ONLINE, clientTypeIsAlreadyOnline);
       connection.off(Events.CONNECT, connect);
       connection.off(Events.CONNECT_ERROR, connectError);
       connection.off(Events.DESKTOP_INIT, desktopInit);

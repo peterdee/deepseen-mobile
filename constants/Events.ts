@@ -4,6 +4,7 @@ import { EventsList } from './types';
 export default {
   CLEAR_QUEUE: 'CLEAR_QUEUE',
   CLIENT_DISCONNECTED: 'CLIENT_DISCONNECTED',
+  CLIENT_TYPE_IS_ALREADY_ONLINE: 'CLIENT_TYPE_IS_ALREADY_ONLINE',
   CONNECT: 'connect',
   CONNECT_ERROR: 'connect_error',
   DESKTOP_INIT: 'DESKTOP_INIT',
