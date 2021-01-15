@@ -26,6 +26,11 @@ export const SignIn = (
     (state) => state.auth.token,
   );
 
+  const [email, setEmail] = useState<string>('');
+  const [error, setError] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(true);
+  const [password, setPassword] = useState<string>('');
+
   // check if signed in
   useEffect(
     () => {
@@ -54,11 +59,6 @@ export const SignIn = (
   );
 
   const dispatch = useDispatch();
-
-  const [email, setEmail] = useState<string>('');
-  const [error, setError] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
-  const [password, setPassword] = useState<string>('');
 
   /**
    * Handle inputs

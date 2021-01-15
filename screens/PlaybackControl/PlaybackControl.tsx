@@ -11,6 +11,7 @@ import { View } from 'react-native';
 import { CLIENT_TYPE, CLIENT_TYPES } from '../../constants/Values';
 import {
   ClientDisconnectedData,
+  ClientTypeIsAlreadyOnlineData,
   DesktopInitData,
   NewClientConnectedData,
   RoomStatusData,
@@ -36,6 +37,7 @@ import {
 } from '../../store/settings/actions';
 import { useRefState } from '../../hooks/useRefState';
 
+import ClientTypeIsAlreadyOnline from './components/ClientTypeAlreadyOnline';
 import Controls from './components/Controls';
 import NotConnected from './components/NotConnected';
 
@@ -86,7 +88,12 @@ export const PlaybackControl = (): JSX.Element => {
 
   // handle the CLIENT_TYPE_IS_ALREADY_ONLINE event
   const clientTypeIsAlreadyOnline = useCallback(
-    (): typeof Socket => {
+    (data: ClientTypeIsAlreadyOnlineData): boolean | typeof Socket => {
+      const { client = '' } = data;
+      if (client !== CLIENT_TYPE) {
+        return false;
+      }
+
       setAlreadyOnline(true);
       setDesktopConnected(false);
       setMobileConnected(false);
@@ -497,7 +504,7 @@ export const PlaybackControl = (): JSX.Element => {
    * @returns {void}
    */
   const hanldeProgressBarSwitch = useCallback(
-    () => {
+    (): void => {
       const originalValue = showProgressBar;
       dispatch(switchProgressBar({ showProgressBar: !originalValue }));
 
@@ -557,42 +564,59 @@ export const PlaybackControl = (): JSX.Element => {
     [setShuffle],
   );
 
+  /**
+   * Handle the reconnection
+   * @returns {boolean|}
+   */
+  const handleReconnect = useCallback(
+    (): boolean | typeof Socket => {
+      if (connection.connected) {
+        return false;
+      }
+
+      setAlreadyOnline(false);
+      return connection.open();
+    },
+    [setAlreadyOnline],
+  );
+
   return (
     <View style={styles.container}>
-      { desktopConnected && mobileConnected
-        ? (
-          <Controls
-            elapsed={elapsed}
-            handleClearQueue={handleClearQueue}
-            handleControls={handleControls}
-            handleMute={handleMute}
-            handleProgress={handleProgress}
-            handleProgressSlidingStart={handleProgressSlidingStart}
-            handleSwitchLoop={handleSwitchLoop}
-            handleSwitchShuffle={handleSwitchShuffle}
-            handleVolume={handleVolume}
-            infoModalVisible={infoModalVisible}
-            isMuted={isMuted}
-            isPlaying={isPlaying}
-            loop={loop}
-            progress={progress}
-            queue={queue}
-            setInfoModalVisible={setInfoModalVisible}
-            setSettingsModalVisible={setSettingsModalVisible}
-            settingsModalVisible={settingsModalVisible}
-            showElapsedTime={showElapsedTime}
-            showProgressBar={showProgressBar}
-            shuffle={shuffle}
-            switchElapsedTime={hanldeElapsedTimeSwitch}
-            switchProgressBar={hanldeProgressBarSwitch}
-            track={track.current}
-            volume={volume}
-          />
-        )
-        : (
-          <NotConnected />
-        )
-      }
+      { alreadyOnline && (
+        <ClientTypeIsAlreadyOnline onPress={handleReconnect} />
+      ) }
+      { !alreadyOnline && desktopConnected && mobileConnected && (
+        <Controls
+          elapsed={elapsed}
+          handleClearQueue={handleClearQueue}
+          handleControls={handleControls}
+          handleMute={handleMute}
+          handleProgress={handleProgress}
+          handleProgressSlidingStart={handleProgressSlidingStart}
+          handleSwitchLoop={handleSwitchLoop}
+          handleSwitchShuffle={handleSwitchShuffle}
+          handleVolume={handleVolume}
+          infoModalVisible={infoModalVisible}
+          isMuted={isMuted}
+          isPlaying={isPlaying}
+          loop={loop}
+          progress={progress}
+          queue={queue}
+          setInfoModalVisible={setInfoModalVisible}
+          setSettingsModalVisible={setSettingsModalVisible}
+          settingsModalVisible={settingsModalVisible}
+          showElapsedTime={showElapsedTime}
+          showProgressBar={showProgressBar}
+          shuffle={shuffle}
+          switchElapsedTime={hanldeElapsedTimeSwitch}
+          switchProgressBar={hanldeProgressBarSwitch}
+          track={track.current}
+          volume={volume}
+        />
+      ) }
+      { !alreadyOnline && !desktopConnected && (
+        <NotConnected />
+      ) }
     </View>
   );
 };

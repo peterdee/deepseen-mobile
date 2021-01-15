@@ -54,6 +54,12 @@ export interface ClientDisconnectedData {
   client: string;
 };
 
+export interface ClientTypeIsAlreadyOnlineData {
+  client: string;
+  info: string;
+  status: number;
+};
+
 export interface DesktopInitData {
   elapsed: number;
   isMuted: boolean;
