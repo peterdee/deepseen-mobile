@@ -5,9 +5,11 @@ import React, {
   useState,
 } from 'react';
 import { Socket } from 'socket.io-client';
+import { StackScreenProps } from '@react-navigation/stack';
 import { useDispatch, useSelector } from 'react-redux';
 import { View } from 'react-native';
 
+import { clearData } from '../../store/user/actions';
 import { CLIENT_TYPE, CLIENT_TYPES } from '../../constants/Values';
 import {
   ClientDisconnectedData,
@@ -29,7 +31,9 @@ import {
 } from './types';
 import Events from '../../constants/Events';
 import IoContext from '../../contexts/socket-io';
+import { RootStackParamList } from '../../types';
 import { RootState } from '../../store';
+import { setAuthentication, setToken } from '../../store/auth/actions';
 import { styles } from './styles';
 import {
   switchElapsedTime,
@@ -45,7 +49,9 @@ import NotConnected from './components/NotConnected';
  * Playback Control screen
  * @returns {JSX.Element}
  */
-export const PlaybackControl = (): JSX.Element => {
+export const PlaybackControl = (
+  { navigation }: StackScreenProps<RootStackParamList, 'Root'>,
+): JSX.Element => {
   const connection = useContext(IoContext);
   const dispatch = useDispatch();
 
@@ -86,7 +92,7 @@ export const PlaybackControl = (): JSX.Element => {
     [setQueue],
   );
 
-  // handle the CLIENT_TYPE_IS_ALREADY_ONLINE event
+  // handle incoming CLIENT_TYPE_IS_ALREADY_ONLINE event
   const clientTypeIsAlreadyOnline = useCallback(
     (data: ClientTypeIsAlreadyOnlineData): boolean | typeof Socket => {
       const { client = '' } = data;
@@ -114,11 +120,13 @@ export const PlaybackControl = (): JSX.Element => {
     [setMobileConnected],
   );
 
-  // handle incoming connect_error event TODO: finish this
-  const connectError = useCallback(
-    (error: any) => console.log('-> CONNECT_ERROR\n', JSON.stringify(error)),
-    [],
-  );
+  // handle incoming connect_error event (happens if token is missing or invalid)
+  const connectError = () => {
+    dispatch(clearData());
+    dispatch(setAuthentication({ isAuthenticated: false }));
+    dispatch(setToken({ token: '' }));
+    return navigation.navigate('SignIn');
+  };
 
   // handle incoming CLIENT_DISCONNECTED event
   const clientDisconnected = useCallback(
