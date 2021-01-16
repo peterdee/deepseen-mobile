@@ -70,6 +70,7 @@ export const PlaybackControl = (
   const [disableProgressSlider, setDisableProgressSlider] = useRefState(false);
   const [elapsed, setElapsed] = useState<number>(0);
   const [infoModalVisible, setInfoModalVisible] = useState<boolean>(false);
+  const [internalErrorModalVisible, setInternalErrorModalVisible] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [loop, setLoop] = useState<boolean>(false);
@@ -185,6 +186,12 @@ export const PlaybackControl = (
   const disconnect = useCallback(
     (): void => setMobileConnected(false),
     [setMobileConnected],
+  );
+
+  // handle incoming INTERNAL_SERVER_ERROR event
+  const internalServerError = useCallback(
+    (): void => setInternalErrorModalVisible(true),
+    [setInternalErrorModalVisible],
   );
 
   // handle incoming NEW_CLIENT_CONNECTED event
@@ -351,6 +358,7 @@ export const PlaybackControl = (
     connection.on(Events.CONNECT_ERROR, connectError);
     connection.on(Events.DESKTOP_INIT, desktopInit);
     connection.on(Events.DISCONNECT, disconnect);
+    connection.on(Events.INTERNAL_SERVER_ERROR, internalServerError);
     connection.on(Events.NEW_CLIENT_CONNECTED, newClientConnected);
     connection.on(Events.ROOM_STATUS, roomStatus);
     connection.on(Events.STOP_PLAYBACK, stopPlayback);
@@ -371,6 +379,7 @@ export const PlaybackControl = (
       connection.off(Events.CONNECT_ERROR, connectError);
       connection.off(Events.DESKTOP_INIT, desktopInit);
       connection.off(Events.DISCONNECT, disconnect);
+      connection.off(Events.INTERNAL_SERVER_ERROR, internalServerError);
       connection.off(Events.NEW_CLIENT_CONNECTED, newClientConnected);
       connection.off(Events.ROOM_STATUS, roomStatus);
       connection.off(Events.STOP_PLAYBACK, stopPlayback);
@@ -605,12 +614,14 @@ export const PlaybackControl = (
           handleSwitchShuffle={handleSwitchShuffle}
           handleVolume={handleVolume}
           infoModalVisible={infoModalVisible}
+          internalErrorModalVisible={internalErrorModalVisible}
           isMuted={isMuted}
           isPlaying={isPlaying}
           loop={loop}
           progress={progress}
           queue={queue}
           setInfoModalVisible={setInfoModalVisible}
+          setInternalErrorModalVisible={setInternalErrorModalVisible}
           setSettingsModalVisible={setSettingsModalVisible}
           settingsModalVisible={settingsModalVisible}
           showElapsedTime={showElapsedTime}

@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react';
-import { Pressable } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
 import { ControlsProps } from '../types';
 import formatName from '../../../utilities/format-track-name';
 import { styles } from '../styles';
-import { Text, View } from '../../../components/Themed';
 
 import InfoModal from './InfoModal';
+import InternalErrorModal from './InternalErrorModal';
 import PlaybackControls from './PlaybackControls';
 import PlaybackSettings from './PlaybackSettings';
 import ProgressBar from './ProgressBar';
@@ -31,12 +31,14 @@ export default (props: ControlsProps): JSX.Element => {
     handleSwitchShuffle,
     handleVolume,
     infoModalVisible,
+    internalErrorModalVisible,
     isMuted,
     isPlaying,
     loop,
     progress,
     queue,
     setInfoModalVisible,
+    setInternalErrorModalVisible,
     setSettingsModalVisible,
     settingsModalVisible,
     showElapsedTime,
@@ -58,6 +60,15 @@ export default (props: ControlsProps): JSX.Element => {
   );
 
   /**
+   * Handle Internal Error modal closing
+   * @returns {void}
+   */
+  const closeInternalErrorModal = useCallback(
+    (): void => setInternalErrorModalVisible(false),
+    [setInternalErrorModalVisible],
+  );
+
+  /**
    * Handle Settings modal closing
    * @returns {void}
    */
@@ -72,6 +83,10 @@ export default (props: ControlsProps): JSX.Element => {
         closeModal={closeInfoModal}
         infoModalVisible={infoModalVisible}
         track={track}
+      />
+      <InternalErrorModal
+        closeModal={closeInternalErrorModal}
+        internalErrorModalVisible={internalErrorModalVisible}
       />
       <SettingsModal
         clearQueue={handleClearQueue}

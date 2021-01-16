@@ -33,12 +33,14 @@ export interface ControlsProps {
   handleSwitchShuffle: () => void;
   handleVolume: (value: number | string) => boolean | typeof Socket;
   infoModalVisible: boolean;
+  internalErrorModalVisible: boolean;
   isMuted: boolean;
   isPlaying: boolean;
   loop: boolean;
   progress: number;
   queue: number | string;
   setInfoModalVisible: (value: boolean) => void;
+  setInternalErrorModalVisible: (value: boolean) => void;
   setSettingsModalVisible: (value: boolean) => void;
   settingsModalVisible: boolean;
   showElapsedTime: boolean;
