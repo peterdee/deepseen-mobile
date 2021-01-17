@@ -5,15 +5,12 @@ import * as React from 'react';
 
 import { Account }  from '../screens/Account';
 import Colors from '../constants/Colors';
-import useColorScheme from '../hooks/useColorScheme';
 import { PlaybackControl } from '../screens/PlaybackControl';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
 export default function BottomTabNavigator() {
-  const colorScheme = useColorScheme();
-
   return (
     <BottomTab.Navigator
       initialRouteName="PlaybackControl"
@@ -22,11 +19,11 @@ export default function BottomTabNavigator() {
         inactiveTintColor: Colors.tabIconInactive,
         showLabel: false,
         style: {
-          backgroundColor: 'black',
+          backgroundColor: Colors.appBackground,
           borderTopWidth: 0,
         },
         tabStyle: {
-          backgroundColor: 'black',
+          backgroundColor: Colors.appBackground,
         },
       }}
     >
@@ -52,8 +49,6 @@ function TabBarIcon(props: { name: any; color: string }) {
   return <Ionicons size={30} style={{ marginBottom: -3 }} {...props} />;
 }
 
-// Each tab has its own navigation stack, you can read more about this pattern here:
-// https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
 const PlaybackControlStack = createStackNavigator<TabOneParamList>();
 
 const commonHeaderOptions = {

@@ -7,8 +7,8 @@ import {
 } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 
-import colors from '../constants/Colors';
-import { RootStackParamList } from '../types';
+import colors from '../../constants/Colors';
+import { RootStackParamList } from '../../types';
 
 const styles = StyleSheet.create({
   container: {
@@ -32,22 +32,20 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function NotFoundScreen({
+export const NotFound = ({
   navigation,
-}: StackScreenProps<RootStackParamList, 'NotFound'>) {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>
-        This screen doesn't exist.
+}: StackScreenProps<RootStackParamList, 'NotFound'>) => (
+  <View style={styles.container}>
+    <Text style={styles.title}>
+      This screen doesn't exist.
+    </Text>
+    <Pressable
+      onPress={() => navigation.replace('Root')}
+      style={styles.link}
+    >
+      <Text style={styles.linkText}>
+        Go to home screen!
       </Text>
-      <Pressable
-        onPress={() => navigation.replace('Root')}
-        style={styles.link}
-      >
-        <Text style={styles.linkText}>
-          Go to home screen!
-        </Text>
-      </Pressable>
-    </View>
-  );
-}
+    </Pressable>
+  </View>
+);
