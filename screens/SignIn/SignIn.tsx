@@ -28,7 +28,7 @@ export const SignIn = (
 
   const [email, setEmail] = useState<string>('');
   const [error, setError] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [password, setPassword] = useState<string>('');
 
   // check if signed in
@@ -78,7 +78,7 @@ export const SignIn = (
 
   /**
    * Handle Sign In form submit
-   * @returns {Promise<*>}
+   * @returns {Promise<void>}
    */
   const handleSubmit = useCallback(
     async (): Promise<void> => {
@@ -110,10 +110,18 @@ export const SignIn = (
         }));
 
         return navigation.replace('Root');
-      } catch {
+      } catch (error) {
         setLoading(false);
+        const { response: { data: { info = '', status = 400 } = {} } = {} } = error;
+        if (info && status) {
+          if (info === 'INTERNAL_SERVER_ERROR' && status === 500) {
+            return setError('Error signing in!');
+          }
+          if (info === 'MISSING_DATA' && status === 400) {
+            return setError('Missing data!');
+          }
+        }
 
-        // TODO: show a proper message depending on the error
         return setError('Access denied!');
       }
     },
@@ -129,10 +137,10 @@ export const SignIn = (
 
   return (
     <Form
-      handleInput={handleInput}
-      handleSubmit={handleSubmit}
       email={email}
       error={error}
+      handleInput={handleInput}
+      handleSubmit={handleSubmit}
       loading={loading}
       password={password}
     />
