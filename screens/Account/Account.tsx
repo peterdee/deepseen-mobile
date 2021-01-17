@@ -29,7 +29,7 @@ export const Account = (
   useEffect(
     () => {
       if (!(isAuthenticated && token)) {
-        navigation.navigate('SignIn');
+        navigation.replace('SignIn');
       }
     },
     [],
@@ -43,7 +43,7 @@ export const Account = (
     dispatch(clearData());
     dispatch(setAuthentication({ isAuthenticated: false }));
     dispatch(setToken({ token: '' }));
-    return navigation.navigate('SignIn');
+    return navigation.replace('SignIn');
   };
 
   return (
