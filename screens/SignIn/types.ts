@@ -1,8 +1,10 @@
 export interface FormProps {
-  handleInput: (input: string, value: string) => void,
-  handleSubmit: () => Promise<void>,
   email: string;
   error: string;
+  handleInput: (input: string, value: string) => void;
+  handleRecovery: () => Promise<void>;
+  handleSignUp: () => Promise<void>;
+  handleSubmit: () => Promise<void>;
   loading: boolean;
   password: string;
 };

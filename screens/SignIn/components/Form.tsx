@@ -6,6 +6,7 @@ import { FormProps } from '../types';
 import { styles } from '../styles';
 
 import BigButton from '../../../components/BigButton';
+import LinkButton from '../../../components/LinkButton';
 import Loader from '../../../components/Loader';
 
 export const formInputs = {
@@ -26,10 +27,12 @@ export const formInputs = {
  */
 export default (props: FormProps): JSX.Element => {
   const {
-    handleInput,
-    handleSubmit,
     email,
     error,
+    handleInput,
+    handleRecovery,
+    handleSignUp,
+    handleSubmit,
     loading,
     password,
   } = props;
@@ -73,6 +76,16 @@ export default (props: FormProps): JSX.Element => {
             disabled={loading}
             onPress={handleSubmit}
             text="SUBMIT"
+          />
+          <LinkButton
+            disabled={loading}
+            onPress={handleRecovery}
+            text="Forgot password?"
+          />
+          <LinkButton
+            disabled={loading}
+            onPress={handleSignUp}
+            text="Don't have an account?"
           />
         </View>
       ) }

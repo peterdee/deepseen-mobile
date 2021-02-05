@@ -4,10 +4,11 @@ import React, {
   useState,
 } from 'react';
 import axios from 'axios';
+import { Linking } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { BACKEND_URL } from '../../configuration';
+import { BACKEND_URL, WEB_APP_URL } from '../../configuration';
 import { CLIENT_TYPE } from '../../constants/Values';
 import Form, { formInputs } from './components/Form';
 import { RootStackParamList } from '../../types';
@@ -77,6 +78,18 @@ export const SignIn = (
   };
 
   /**
+   * Open web application in the browser on the Account Recovery page
+   * @returns {Promise<*>}
+   */
+  const handleRecovery = (): Promise<void> => Linking.openURL(`${WEB_APP_URL}/recovery`);
+
+  /**
+   * Open web application in the browser on the Sign Up page
+   * @returns {Promise<*>}
+   */
+  const handleSignUp = (): Promise<void> => Linking.openURL(`${WEB_APP_URL}/signup`);
+
+  /**
    * Handle Sign In form submit
    * @returns {Promise<void>}
    */
@@ -120,6 +133,9 @@ export const SignIn = (
           if (info === 'MISSING_DATA' && status === 400) {
             return setError('Missing data!');
           }
+          if (info === 'TOO_MANY_REQUESTS' && status === 429) {
+            return setError('Too many requests! Repeat in 5 minutes!');
+          }
         }
 
         return setError('Access denied!');
@@ -140,6 +156,8 @@ export const SignIn = (
       email={email}
       error={error}
       handleInput={handleInput}
+      handleRecovery={handleRecovery}
+      handleSignUp={handleSignUp}
       handleSubmit={handleSubmit}
       loading={loading}
       password={password}
