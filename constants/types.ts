@@ -2,6 +2,7 @@ export interface EventsList {
   CLEAR_QUEUE: string;
   CLIENT_DISCONNECTED: string;
   CLIENT_TYPE_IS_ALREADY_ONLINE: string;
+  COMPLETE_LOGOUT: string;
   CONNECT: string;
   CONNECT_ERROR: string;
   DESKTOP_INIT: string;

@@ -140,6 +140,14 @@ export const PlaybackControl = (
     [setDesktopConnected],
   );
 
+  // handle incoming COMPLETE_LOGOUT event
+  const completeLogout = () => {
+    dispatch(clearData());
+    dispatch(setAuthentication({ isAuthenticated: false }));
+    dispatch(setToken({ token: '' }));
+    return navigation.navigate('SignIn');
+  };
+
   // handle incoming DESKTOP_INIT event
   const desktopInit = useCallback(
     (data: DesktopInitData): boolean | void => {
@@ -354,6 +362,7 @@ export const PlaybackControl = (
     connection.on(Events.CLEAR_QUEUE, clearQueue);
     connection.on(Events.CLIENT_DISCONNECTED, clientDisconnected);
     connection.on(Events.CLIENT_TYPE_IS_ALREADY_ONLINE, clientTypeIsAlreadyOnline);
+    connection.on(Events.COMPLETE_LOGOUT, completeLogout);
     connection.on(Events.CONNECT, connect);
     connection.on(Events.CONNECT_ERROR, connectError);
     connection.on(Events.DESKTOP_INIT, desktopInit);
