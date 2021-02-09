@@ -126,7 +126,7 @@ export const PlaybackControl = (
     dispatch(clearData());
     dispatch(setAuthentication({ isAuthenticated: false }));
     dispatch(setToken({ token: '' }));
-    return navigation.navigate('SignIn');
+    return navigation.replace('SignIn');
   };
 
   // handle incoming CLIENT_DISCONNECTED event
@@ -145,7 +145,7 @@ export const PlaybackControl = (
     dispatch(clearData());
     dispatch(setAuthentication({ isAuthenticated: false }));
     dispatch(setToken({ token: '' }));
-    return navigation.navigate('SignIn');
+    return navigation.replace('SignIn');
   };
 
   // handle incoming DESKTOP_INIT event
